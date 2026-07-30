@@ -134,11 +134,6 @@
   .zone-row { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.4); padding: 7px 10px; border-radius: 4px; border: 1px solid var(--border); }
   .zone-label { font-size: 10px; font-weight: 600; font-family: var(--font-kh); }
 
-  .control-bar { display: flex; gap: 8px; margin-bottom: 2px; }
-  .ctrl-btn { flex: 1; padding: 8px; font-size: 11px; font-weight: 600; border-radius: 4px; border: 1px solid var(--border); background: var(--panel-alt); color: var(--text); cursor: pointer; text-align: center; font-family: var(--font-kh); transition: 0.2s; }
-  .ctrl-btn.active-sell { background: rgba(239, 68, 68, 0.2); color: var(--red); border-color: var(--red); }
-  .ctrl-btn.active-buy { background: rgba(16, 185, 129, 0.2); color: var(--green); border-color: var(--green); }
-
   .scroll-list { max-height: 140px; overflow-y: auto; }
   .scroll-list::-webkit-scrollbar { width: 3px; }
   .scroll-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
@@ -199,44 +194,38 @@
     </div>
   </div>
 
-  <!-- 2. RIGHT COLUMN: CONTROLS & TELEGRAM PANEL -->
+  <!-- 2. RIGHT COLUMN: TELEGRAM PANEL (NO BUTTONS) -->
   <div class="right-workspace">
-    <div style="font-size: 10px; color: var(--text-dim); margin-bottom: -4px;">ប្តូរទិសដៅវិភាគ (Manual / Auto Test):</div>
-    <div class="control-bar">
-      <button class="ctrl-btn active-sell" id="btnSellMode" onclick="setMode('SELL')">🔴 ចេញសញ្ញា Sell Limit (ដាច់ខាត)</button>
-      <button class="ctrl-btn" id="btnBuyMode" onclick="setMode('BUY')">🟢 ចេញសញ្ញា Buy Limit (ដាច់ខាត)</button>
-    </div>
-
     <!-- SINGLE ACTIVE SIGNAL CARD -->
-    <div class="signal-card" id="signalCardContainer" style="border-left-color: var(--red);">
+    <div class="signal-card" id="signalCardContainer" style="border-left-color: var(--amber);">
       <div class="sc-header">
-        <span class="sc-title kh" id="cardTitle">Sell Limit & 3 TPs</span>
-        <span class="sc-badge" id="execModeBadge" style="background:rgba(239,68,68,0.15); color:var(--red); border-color:rgba(239,68,68,0.3);">SELL EXCLUSIVE</span>
+        <span class="sc-title kh" id="cardTitle">រង់ចាំសញ្ញាវិភាគ (Waiting for Signal)</span>
+        <span class="sc-badge" id="execModeBadge" style="background:rgba(245,158,11,0.15); color:var(--amber); border-color:rgba(245,158,11,0.3);">STANDBY</span>
       </div>
       
-      <div class="advice-box" id="adviceBox" style="background:rgba(239,68,68,0.1); border-color:rgba(239,68,68,0.3); color:var(--red);">
-        <span>✈️</span>
-        <span id="adviceText" class="kh">ទិសដៅ Sell កំពុងដំណើរការ គ្មានសញ្ញា Buy លាយឡំគ្នាទេ។</span>
+      <div class="advice-box" id="adviceBox" style="background:rgba(245,158,11,0.1); border-color:rgba(245,158,11,0.3); color:var(--amber);">
+        <span>⏳</span>
+        <span id="adviceText" class="kh">ប្រព័ន្ធកំពុងរង់ចាំសញ្ញា Entry Now ចូលមកស្វ័យប្រវត្ត...</span>
       </div>
       
       <div class="sc-grid">
-        <div><span id="entryLabel">តម្លៃចូល (Sell Limit)</span><strong class="en" style="color:var(--red);" id="entryPriceVal">4,054.20</strong></div>
-        <div><span>កាត់ខាត (Tight SL)</span><strong class="en" style="color:var(--red);" id="slPriceVal">4,068.10</strong></div>
+        <div><span id="entryLabel">តម្លៃចូល (Entry Market)</span><strong class="en" style="color:var(--text-dim);" id="entryPriceVal">--.--</strong></div>
+        <div><span>កាត់ខាត (Tight SL)</span><strong class="en" style="color:var(--text-dim);" id="slPriceVal">--.--</strong></div>
       </div>
 
       <span style="font-size: 10px; color: var(--text-dim); font-family: var(--font-kh);">គោលដៅ Take Profit (3 TPs):</span>
       <div class="tp-grid">
         <div class="tp-box">
           <span>TP 1</span>
-          <strong class="en" id="tp1Val">4,015.00</strong>
+          <strong class="en" id="tp1Val">--.--</strong>
         </div>
         <div class="tp-box">
           <span>TP 2</span>
-          <strong class="en" id="tp2Val">3,980.00</strong>
+          <strong class="en" id="tp2Val">--.--</strong>
         </div>
         <div class="tp-box">
           <span>TP 3</span>
-          <strong class="en" id="tp3Val">3,946.72</strong>
+          <strong class="en" id="tp3Val">--.--</strong>
         </div>
       </div>
     </div>
@@ -245,7 +234,7 @@
     <div class="panel">
       <div class="panel-head">
         <span>📦 ស្ថានភាព Telegram Webhook v4.9</span>
-        <span class="mono" style="color:var(--telegram); font-size:10px;">EXCLUSIVE MODE</span>
+        <span class="mono" style="color:var(--telegram); font-size:10px;">AUTO SIGNAL MODE</span>
       </div>
       <div style="padding: 10px;">
         <div class="zones-box">
@@ -254,7 +243,7 @@
             <span class="en" style="color:var(--green);">Active</span>
           </div>
           <div class="zone-row" style="border-left: 3px solid var(--amber);">
-            <span class="zone-label" style="color:var(--amber);">Active / Cancel Alert</span>
+            <span class="zone-label" style="color:var(--amber);">Auto Signal Dispatch</span>
             <span class="en" style="color:var(--green);">Active</span>
           </div>
           <div class="zone-row" style="border-left: 3px solid var(--red);">
@@ -274,7 +263,7 @@
       <div class="scroll-list" id="logList">
         <div class="log-item">
           <div class="log-meta"><span style="color:var(--telegram);">Telegram Bot</span><span class="mono">INIT</span></div>
-          <div>✈️ ប្រព័ន្ធត្រូវបានកែសម្រួល៖ ភ្ជាប់មុខងារ Dynamic Calculation ស្របតាមតម្លៃទីផ្សារពិតប្រាកដ។</div>
+          <div>✈️ ប្រព័ន្ធដំណើរការស្វ័យប្រវត្ត៖ រង់ចាំសញ្ញា BUY ឬ SELL Entry Now ចូលមកដើម្បីលោតតម្លៃ និងផ្ញើទៅ Telegram។</div>
         </div>
       </div>
     </div>
@@ -286,22 +275,18 @@
     document.getElementById('clock').textContent = new Date().toLocaleTimeString('en-GB');
   }, 1000);
 
-  let currentMode = "SELL"; 
-  let systemState = "LIMIT"; 
-
-  // មុខងារផ្ញើសាររួមបញ្ចូលទាំង Log ក្នុង Web Page និង Telegram API ពិតប្រាកដ
+  // មុខងារផ្ញើសារស្វ័យប្រវត្តទៅកាន់ Telegram Bot
   async function sendTelegramAlert(title, message, type) {
-    const BOT_TOKEN = "YOUR_TELEGRAM_BOT_TOKEN_HERE"; 
-    const CHAT_ID = "YOUR_CHAT_ID_HERE";
+    const BOT_TOKEN = "8541087672:AAGRli-wwUE_-cACSNMbdjnS7p916xU8EMQ"; // ដាក់ Bot Token របស់អ្នកនៅទីនេះ
+    const CHAT_ID = "7176722918";             // ដាក់ Chat ID របស់អ្នកនៅទីនេះ
     
     const timeStr = new Date().toLocaleTimeString('en-GB');
     const fullText = `🔔 *${title}* [${timeStr}]\n\n${message}`;
 
     const logList = document.getElementById('logList');
     let colorCode = "var(--telegram)";
-    if(type === 'sell' || type === 'cancel') colorCode = "var(--red)";
-    if(type === 'buy' || type === 'active') colorCode = "var(--green)";
-    if(type === 'entry_now') colorCode = "var(--amber)";
+    if(type === 'sell') colorCode = "var(--red)";
+    if(type === 'buy') colorCode = "var(--green)";
 
     const item = document.createElement('div');
     item.className = 'log-item';
@@ -311,10 +296,11 @@
     `;
     logList.prepend(item);
 
-    if (BOT_TOKEN !== "YOUR_TELEGRAM_BOT_TOKEN_HERE") {
+    // បញ្ជូនសារទៅកាន់ Telegram API ផ្ទាល់
+    if (BOT_TOKEN !== "YOUR_TELEGRAM_BOT_TOKEN_HERE" && CHAT_ID !== "YOUR_CHAT_ID_HERE") {
         try {
             const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-            await fetch(url, {
+            const response = await fetch(url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -323,62 +309,21 @@
                     parse_mode: 'Markdown'
                 })
             });
-        } catch (error) {
-            console.error("Telegram API Error:", error);
-        }
-    }
-  }
-
-  // មុខងារទាញយកទិន្នន័យវិភាគពី API ខាងក្រៅ
-  async function fetchMarketAnalysisFromAPI() {
-    const logList = document.getElementById('logList');
-    const timeStr = new Date().toLocaleTimeString('en-GB');
-
-    const loadingItem = document.createElement('div');
-    loadingItem.className = 'log-item';
-    loadingItem.innerHTML = `
-      <div class="log-meta"><span style="color:var(--amber);">[API] System</span><span class="mono">${timeStr}</span></div>
-      <div>⏳ កំពុងទាញយកទិន្នន័យវិភាគពី API...</div>
-    `;
-    logList.prepend(loadingItem);
-
-    try {
-        const API_URL = "https://api.yourdomain.com/v1/analyze?symbol=XAUUSD";
-        
-        const response = await fetch(API_URL, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer YOUR_API_KEY_HERE'
+            const data = await response.json();
+            if(!data.ok) {
+                console.error("Telegram error response:", data);
             }
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+        } catch (error) {
+            console.error("Telegram API Network Error:", error);
         }
-
-        const data = await response.json();
-        
-        if (data && data.price && data.action) {
-            processSignal(data.action, data.price);
-            sendTelegramAlert("API ANALYSIS SUCCESS", `ទិន្នន័យវិភាគត្រូវបានអាប់ដេតដោយស្វ័យប្រវត្តិពី API ជាជោគជ័យ។`, "active");
-        }
-
-    } catch (error) {
-        console.error("API Analysis Error:", error);
-        
-        const errItem = document.createElement('div');
-        errItem.className = 'log-item';
-        errItem.innerHTML = `
-          <div class="log-meta"><span style="color:var(--red);">[API Error]</span><span class="mono">${timeStr}</span></div>
-          <div>❌ មិនអាចភ្ជាប់ទៅកាន់ API ទេ។ ကျေးជុលពិនិត្យមើល Link ឬ Connection ឡើងវិញ។</div>
-        `;
-        logList.prepend(errItem);
     }
   }
 
-  // មុខងារសម្រាប់ធ្វើបច្ចុប្បន្នភាពតម្លៃ និងផ្ញើសារទៅ Telegram ស្វ័យប្រវត្តិ (Dynamic)
-  function processSignal(signalType, currentPrice) {
+  // មុខងារទទួលសញ្ញាស្វ័យប្រវត្ត (អាចប្រើសម្រាប់เชื่อมต่อกับ Webhook ខាងក្រៅ ឬ TradingView Alert)
+  function handleIncomingSignal(type, customPrice) {
+    const el = document.querySelector('.js-symbol-last');
+    let currentPrice = customPrice || (el ? parseFloat(el.textContent.trim().replace(/,/g, '')) : 4054.20);
+
     let entry, sl, tp1, tp2, tp3;
     let entryColor = "";
 
@@ -389,8 +334,12 @@
     const tp1Val = document.getElementById('tp1Val');
     const tp2Val = document.getElementById('tp2Val');
     const tp3Val = document.getElementById('tp3Val');
+    const signalCard = document.getElementById('signalCardContainer');
+    const badge = document.getElementById('execModeBadge');
+    const adviceText = document.getElementById('adviceText');
+    const adviceBox = document.getElementById('adviceBox');
 
-    if (signalType === "BUY_LIMIT") {
+    if (type === "BUY") {
       entry = currentPrice; 
       sl = entry - 15.50;  
       tp1 = entry + 24.50; 
@@ -398,72 +347,8 @@
       tp3 = entry + 74.50; 
       entryColor = "var(--green)";
       
-      cardTitle.textContent = "Buy Limit & 3 TPs";
-      entryLabel.textContent = "តម្លៃចូល (Buy Limit)";
-    } else if (signalType === "SELL_LIMIT") {
-      entry = currentPrice;
-      sl = entry + 13.90;
-      tp1 = entry - 25.00;
-      tp2 = entry - 50.00;
-      tp3 = entry - 75.00;
-      entryColor = "var(--red)";
-
-      cardTitle.textContent = "Sell Limit & 3 TPs";
-      entryLabel.textContent = "តម្លៃចូល (Sell Limit)";
-    }
-
-    entryPriceVal.style.color = entryColor;
-    entryPriceVal.textContent = entry.toFixed(2);
-    slPriceVal.textContent = sl.toFixed(2);
-    tp1Val.textContent = tp1.toFixed(2);
-    tp2Val.textContent = tp2.toFixed(2);
-    tp3Val.textContent = tp3.toFixed(2);
-
-    const alertTitle = signalType === "BUY_LIMIT" ? "NEW BUY LIMIT SIGNAL" : "NEW SELL LIMIT SIGNAL";
-    const symbolText = signalType === "BUY_LIMIT" ? "🟢 XAUUSD Buy Limit: " : "🔴 XAUUSD Sell Limit: ";
-    
-    const message = `${symbolText}${entry.toFixed(2)} | SL: ${sl.toFixed(2)} | TP1: ${tp1.toFixed(2)} | TP2: ${tp2.toFixed(2)} | TP3: ${tp3.toFixed(2)}`;
-    sendTelegramAlert(alertTitle, message, signalType === "BUY_LIMIT" ? "buy" : "sell");
-  }
-
-  function setMode(mode) {
-    // ផ្ទៀងផ្ទាត់ការពារកុំឱ្យបញ្ជូនសញ្ញាជាន់គ្នាប្រសិនបើរបៀបនោះកំពុងដំណើរការស្រាប់
-    if (currentMode === mode) return;
-    
-    currentMode = mode;
-    systemState = "LIMIT";
-    const btnSell = document.getElementById('btnSellMode');
-    const btnBuy = document.getElementById('btnBuyMode');
-    const signalCard = document.getElementById('signalCardContainer');
-    const badge = document.getElementById('execModeBadge');
-    const adviceText = document.getElementById('adviceText');
-    const adviceBox = document.getElementById('adviceBox');
-
-    const el = document.querySelector('.js-symbol-last');
-    let currentPrice = el ? parseFloat(el.textContent.trim().replace(/,/g, '')) : (mode === 'SELL' ? 4054.20 : 4010.50);
-
-    if(mode === 'SELL') {
-      btnSell.className = "ctrl-btn active-sell";
-      btnBuy.className = "ctrl-btn";
-      
-      signalCard.style.borderLeftColor = "var(--red)";
-      badge.textContent = "SELL EXCLUSIVE";
-      badge.style.background = "rgba(239, 68, 68, 0.15)";
-      badge.style.color = "var(--red)";
-      badge.style.borderColor = "rgba(239, 68, 68, 0.3)";
-
-      adviceBox.style.background = "rgba(239, 68, 68, 0.1)";
-      adviceBox.style.borderColor = "rgba(239, 68, 68, 0.3)";
-      adviceBox.style.color = "var(--red)";
-      adviceText.textContent = "ទិសដៅ Sell កំពុងដំណើរការដាច់ខាត គ្មានសញ្ញា Buy លាយឡំគ្នាទេ។";
-
-      processSignal("SELL_LIMIT", currentPrice);
-    } else {
-      btnBuy.className = "ctrl-btn active-buy";
-      btnSell.className = "ctrl-btn";
-      
       signalCard.style.borderLeftColor = "var(--green)";
-      badge.textContent = "BUY EXCLUSIVE";
+      badge.textContent = "BUY ENTRY NOW";
       badge.style.background = "rgba(16, 185, 129, 0.15)";
       badge.style.color = "var(--green)";
       badge.style.borderColor = "rgba(16, 185, 129, 0.3)";
@@ -471,10 +356,47 @@
       adviceBox.style.background = "rgba(16, 185, 129, 0.1)";
       adviceBox.style.borderColor = "rgba(16, 185, 129, 0.3)";
       adviceBox.style.color = "var(--green)";
-      adviceText.textContent = "ទិសដៅ Buy កំពុងដំណើរការដាច់ខាត គ្មានសញ្ញា Sell លាយឡំគ្នាទេ។";
+      adviceText.textContent = "សញ្ញា Buy Entry Now បានចូលមកដល់ស្វ័យប្រវត្ត!";
 
-      processSignal("BUY_LIMIT", currentPrice);
+      cardTitle.textContent = "Buy Entry Now & 3 TPs";
+      entryLabel.textContent = "តម្លៃចូល (Buy Market)";
+    } else if (type === "SELL") {
+      entry = currentPrice;
+      sl = entry + 13.90;
+      tp1 = entry - 25.00;
+      tp2 = entry - 50.00;
+      tp3 = entry - 75.00;
+      entryColor = "var(--red)";
+
+      signalCard.style.borderLeftColor = "var(--red)";
+      badge.textContent = "SELL ENTRY NOW";
+      badge.style.background = "rgba(239, 68, 68, 0.15)";
+      badge.style.color = "var(--red)";
+      badge.style.borderColor = "rgba(239, 68, 68, 0.3)";
+
+      adviceBox.style.background = "rgba(239, 68, 68, 0.1)";
+      adviceBox.style.borderColor = "rgba(239, 68, 68, 0.3)";
+      adviceBox.style.color = "var(--red)";
+      adviceText.textContent = "សញ្ញា Sell Entry Now បានចូលមកដល់ស្វ័យប្រវត្ត!";
+
+      cardTitle.textContent = "Sell Entry Now & 3 TPs";
+      entryLabel.textContent = "តម្លៃចូល (Sell Market)";
     }
+
+    entryPriceVal.style.color = entryColor;
+    slPriceVal.style.color = entryColor;
+    entryPriceVal.textContent = entry.toFixed(2);
+    slPriceVal.textContent = sl.toFixed(2);
+    tp1Val.textContent = tp1.toFixed(2);
+    tp2Val.textContent = tp2.toFixed(2);
+    tp3Val.textContent = tp3.toFixed(2);
+
+    const alertTitle = type === "BUY" ? "🔥 INSTANT BUY ENTRY NOW" : "🔥 INSTANT SELL ENTRY NOW";
+    const symbolText = type === "BUY" ? "🟢 XAUUSD Buy Entry Now: " : "🔴 XAUUSD Sell Entry Now: ";
+    
+    const message = `${symbolText}${entry.toFixed(2)}\n🔹 *SL:* ${sl.toFixed(2)}\n🎯 *TP1:* ${tp1.toFixed(2)}\n🎯 *TP2:* ${tp2.toFixed(2)}\n🎯 *TP3:* ${tp3.toFixed(2)}`;
+    
+    sendTelegramAlert(alertTitle, message, type.toLowerCase());
   }
 
   function evaluateTelegramSync() {
@@ -495,10 +417,6 @@
 
   window.addEventListener('DOMContentLoaded', () => {
     evaluateTelegramSync();
-    setMode('SELL');
-
-    // កំណត់ពេលឱ្យទាញយក API ស្វ័យប្រវត្តិរៀងរាល់ ៥នាទីម្តង (300000 ms)
-    setInterval(fetchMarketAnalysisFromAPI, 300000);
   });
 
   setInterval(evaluateTelegramSync, 1500);

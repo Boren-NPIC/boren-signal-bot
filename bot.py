@@ -20,15 +20,12 @@ def send_telegram_message(text):
         print(f"Error sending telegram: {e}")
 
 def fetch_gold_price():
-    # ប្រើប្រាស់ Public API ជំនួសដើម្បីទាញតម្លៃមាស (XAUUSD) ឱ្យបានត្រឹមត្រូវ
     try:
-        # ប្រើប្រាស់ Metals-API ឬ Public endpoint ផ្សេង ឬ Free Forex/Gold API
+        # ទាញតម្លៃមាស Spot ពីប្រភពទីផ្សារ
         url = "https://data-asg.goldprice.org/dbXRates/USD"
         headers = {'User-Agent': 'Mozilla/5.0'}
         res = requests.get(url, headers=headers)
         data = res.json()
-        
-        # យកតម្លៃមាសក្នុង ១ អង្សាឱន (Oz) ជា USD
         price = data['items'][0]['xauPrice']
         return float(price)
     except Exception as e:
@@ -36,31 +33,58 @@ def fetch_gold_price():
         return None
 
 def main_loop():
-    print("🤖 Boren Signal Bot is running 24/7...")
-    send_telegram_message("🚀 *BOREN-SIGNAL PRO* បានចាប់ផ្តើមដំណើរការលើ Cloud 24/7 ជោគជ័យ!")
+    print("🤖 Boren Signal Bot with Trend Filter is running 24/7...")
+    send_telegram_message("🚀 *BOREN-SIGNAL PRO (Trend Filter)* បានចាប់ផ្តើមដំណើរការលើ Cloud ជោគជ័យ!")
     
+    # រក្សាទុកប្រវត្តិតម្លៃខ្លះៗដើម្បីយកมาคำนวณ Trend (Moving Average ងាយស្រួល)
+    price_history = []
+
     while True:
         price = fetch_gold_price()
         
-        # ប្រសិនបើទាញតម្លៃមិនបាន ឬតម្លៃខុសប្រក្រតី (ឧទាហរណ៍ធ្លាក់ក្រោម 1000 ឬលើស 5000) អាចការពារទុកជាមុន
         if price and 1000 < price < 5000:
             print(f"Current Gold Price: ${price:.2f}")
             
-            signal_type = "BUY" if price > 2000 else "SELL"
-            entry = price
+            # បញ្ចូលតម្លៃថ្មីទៅក្នុងបញ្ជីប្រវត្តិ (រក្សាទុកត្រឹម 5 តម្លៃចុងក្រោយ)
+            price_history.append(price)
+            if len(price_history) > 5:
+                price_history.pop(0)
             
-            if signal_type == "BUY":
-                sl = price - 6
-                tp = price + 12
-            else:
-                sl = price + 6
-                tp = price - 12
+            # ត្រូវមានទិន្នន័យគ្រប់គ្រាន់ទើបផ្ដើមវិភាគ Trend
+            if len(price_history) == 5:
+                # គណនាតម្លៃមធ្យម (Simple Moving Average) ខ្លីៗ
+                sma = sum(price_history) / len(price_history)
+                
+                # Trend Filter Logic:
+                # បើតម្លៃបច្ចុប្បន្នខ្ពស់กว่า SMA គឺ Bullish Trend (BUY)
+                # បើទាបกว่า SMA គឺ Bearish Trend (SELL)
+                if price > sma:
+                    signal_type = "BUY"
+                    entry = price
+                    sl = price - 8.0   # ពង្រីកចម្ងាយ SL បន្តិចដើម្បីកុំឱ្យโดนសង្កត់កាត់លឿនពេក
+                    tp = price + 15.0  # កំណត់ TP ឱ្យសមាមាត្រល្អ
+                else:
+                    signal_type = "SELL"
+                    entry = price
+                    sl = price + 8.0
+                    tp = price - 15.0
 
-            msg = f"🚨 *BOREN-SIGNAL PRO ELITE* 🚨\n🪙 XAUUSD - {signal_type}\n📥 Entry: ${entry:.2f}\n🛑 SL: ${sl:.2f}\n🎯 TP: ${tp:.2f}"
-            send_telegram_message(msg)
-            
-            # សម្រាក 5 នាទីមុនផ្ញើរសារបន្ទាប់
-            time.sleep(300)
+                msg = (
+                    f"🚨 *BOREN-SIGNAL PRO ELITE (Trend Filter)* 🚨\n"
+                    f"🪙 XAUUSD - *{signal_type}*\n"
+                    f"📈 Trend Status: {'BULLISH 🟢' if signal_type == 'BUY' else 'BEARISH 🔴'}\n"
+                    f"📥 Entry: `${entry:.2f}`\n"
+                    f"🛑 SL: `${sl:.2f}`\n"
+                    f"🎯 TP: `${tp:.2f}`"
+                )
+                
+                send_telegram_message(msg)
+                print(f"Signal Sent: {signal_type} at ${entry:.2f}")
+                
+                # សម្រាករយៈពេល 10 នាទី (600 វិនាទី) មុននឹងចេញសញ្ញាបន្ទាប់ ដើម្បីធានាគុណភាព Signal
+                time.sleep(600)
+            else:
+                time.sleep(60)
         else:
             print("Fetching price failed or invalid price range, retrying...")
             time.sleep(60)

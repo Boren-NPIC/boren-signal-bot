@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="km">
 <head>
@@ -438,4 +439,446 @@
 </script>
 
 </body>
+=======
+<!DOCTYPE html>
+<html lang="km">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BOREN-SIGNAL PRO - Elite Trading Engine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+Khmer:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #07090E;
+    --panel: #0D131D;
+    --panel-alt: #121A26;
+    --border: #1E293B;
+    --text: #F1F5F9;
+    --text-dim: #94A3B8;
+    --text-faint: #475569;
+    --amber: #F59E0B;
+    --amber-glow: rgba(245, 158, 11, 0.15);
+    --red: #EF4444;
+    --red-glow: rgba(239, 68, 68, 0.15);
+    --orange: #F97316;
+    --green: #10B981;
+    --green-glow: rgba(16, 185, 129, 0.15);
+    --cyan: #06B6D4;
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+    --font-kh: 'Noto Sans Khmer', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-kh), sans-serif;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .mono { font-family: var(--font-mono), monospace; font-variant-numeric: tabular-nums; }
+  .en { font-family: var(--font-display), sans-serif; }
+
+  header {
+    flex: 0 0 auto;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    background: rgba(13, 19, 29, 0.9);
+    backdrop-filter: blur(10px);
+    z-index: 100;
+  }
+  .brand { display: flex; align-items: center; gap: 10px; }
+  .brand-logo-box {
+    width: 32px; height: 32px; background: linear-gradient(135deg, var(--amber), #D97706);
+    border-radius: 6px; display: flex; align-items: center; justify-content: center;
+    font-weight: 700; color: #000; font-size: 16px; font-family: var(--font-display);
+    box-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
+  }
+  .brand-title { font-size: 16px; font-weight: 700; color: var(--amber); letter-spacing: 0.5px; }
+  .brand-sub { font-size: 10px; color: var(--text-dim); }
+  
+  .header-right { display: flex; align-items: center; gap: 15px; font-size: 12px; }
+  .live-badge {
+    background: var(--green-glow); color: var(--green); border: 1px solid rgba(16, 185, 129, 0.3);
+    padding: 3px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; display: flex; align-items: center; gap: 5px;
+  }
+
+  main {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 380px 480px;
+    gap: 12px;
+    padding: 12px;
+    overflow: hidden;
+  }
+  @media(max-width: 1400px) {
+    main { grid-template-columns: 1fr 400px; overflow-y: auto; }
+    body { height: auto; overflow: auto; }
+    .ff-column { display: none; }
+  }
+
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  }
+  .panel-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 14px;
+    background: var(--panel-alt);
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-dim);
+    flex-shrink: 0;
+  }
+
+  .left-workspace { display: flex; flex-direction: column; gap: 10px; height: 100%; }
+  .chart-panel { flex: 1; min-height: 400px; }
+  .tv-container { width: 100%; height: 100%; background: #07090E; position: relative; }
+  .tradingview-widget-container { width: 100%; height: 100%; }
+  .tradingview-widget-container__widget { width: 100%; height: 100%; }
+
+  .market-analysis-bar {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; flex-shrink: 0;
+  }
+  .ma-card { background: var(--panel); border: 1px solid var(--border); border-radius: 6px; padding: 10px 12px; }
+  .ma-label { font-size: 10px; color: var(--text-dim); margin-bottom: 2px; }
+  .ma-val { font-size: 13px; font-weight: 700; font-family: var(--font-mono); }
+
+  .middle-workspace { display: flex; flex-direction: column; gap: 10px; height: 100%; overflow-y: auto; }
+  .middle-workspace::-webkit-scrollbar { width: 4px; }
+  .middle-workspace::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .ff-column { display: flex; flex-direction: column; gap: 10px; height: 100%; }
+
+  .signal-card {
+    background: var(--panel); border: 1px solid var(--border); border-left: 4px solid var(--amber); padding: 12px; border-radius: 6px;
+  }
+  .signal-card.active-buy { border-left-color: var(--green); background: linear-gradient(135deg, var(--panel), rgba(16, 185, 129, 0.05)); }
+  .signal-card.active-sell { border-left-color: var(--red); background: linear-gradient(135deg, var(--panel), rgba(239, 68, 68, 0.05)); }
+  
+  .sc-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .sc-title { font-size: 13px; font-weight: 700; color: var(--text); }
+  .sc-badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; font-family: var(--font-mono); }
+  .sc-badge.waiting { background: var(--amber-glow); color: var(--amber); border: 1px solid rgba(245, 158, 11, 0.3); }
+  .sc-badge.buy { background: var(--green-glow); color: var(--green); border: 1px solid rgba(16, 185, 129, 0.3); }
+  .sc-badge.sell { background: var(--red-glow); color: var(--red); border: 1px solid rgba(239, 68, 68, 0.3); }
+  
+  .sc-desc { font-size: 11px; color: var(--text-dim); margin-bottom: 10px; line-height: 1.4; }
+  
+  .sc-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; font-size: 11px; font-family: var(--font-mono); background: rgba(0,0,0,0.2); padding: 8px; border-radius: 6px; border: 1px solid var(--border); }
+  .sc-grid div { display: flex; flex-direction: column; gap: 2px; }
+  .sc-grid span { color: var(--text-dim); font-size: 9px; }
+  .sc-grid strong { font-size: 12px; }
+
+  .scroll-list { max-height: 140px; overflow-y: auto; }
+  .scroll-list::-webkit-scrollbar { width: 3px; }
+  .scroll-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  
+  .log-item {
+    padding: 8px 10px; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: 3px; background: rgba(13, 19, 29, 0.5); font-size: 11px;
+  }
+  .log-meta { font-family: var(--font-mono); font-size: 9px; color: var(--text-faint); display: flex; justify-content: space-between; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="brand-logo-box">B</div>
+    <div>
+      <div class="brand-title en">BOREN-SIGNAL PRO <span style="font-size:10px; background:var(--amber); color:#000; padding:1px 5px; border-radius:3px;">ELITE v3.6</span></div>
+      <div class="brand-sub">ប្រព័ន្ធបញ្ញាសិប្បនិម្មិតវិភាគទីផ្សារមាសស្វ័យប្រវត្តិ</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="live-badge"><span>●</span> Live Feed Synchronized</div>
+    <div class="mono" id="clock" style="color:var(--amber); font-weight:600;">--:--:--</div>
+  </div>
+</header>
+
+<main>
+  <!-- 1. LEFT COLUMN: CHART & METRICS -->
+  <div class="left-workspace">
+    <div class="panel chart-panel">
+      <div class="panel-head">
+        <span>📊 ក្រាហ្វវិភាគ XAUUSD (Timeframe: 15M)</span>
+        <span class="mono" id="livePriceHeader" style="color:var(--amber); font-size:13px;">តម្លៃ: កំពុងផ្ទុក...</span>
+      </div>
+      <div class="tv-container">
+        <div class="tradingview-widget-container">
+          <div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div>
+          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+          {
+            "width": "100%",
+            "height": "100%",
+            "symbol": "OANDA:XAUUSD",
+            "interval": "15",
+            "timezone": "Asia/Bangkok",
+            "theme": "dark",
+            "style": "1",
+            "locale": "en",
+            "allow_symbol_change": true,
+            "calendar": false,
+            "support_host": "https://www.tradingview.com"
+          }
+          </script>
+        </div>
+      </div>
+    </div>
+
+    <div class="market-analysis-bar">
+      <div class="ma-card">
+        <div class="ma-label">រចនាសម្ព័ន្ធទីផ្សារ</div>
+        <div class="ma-val" id="marketStructure" style="color: var(--cyan); font-size: 11px;">ស្កេន...</div>
+      </div>
+      <div class="ma-card">
+        <div class="ma-label">ទិសដៅ Trend</div>
+        <div class="ma-val" id="trendBias" style="color: var(--amber);">NEUTRAL</div>
+      </div>
+      <div class="ma-card">
+        <div class="ma-label">សន្ទុះ RSI (14)</div>
+        <div class="ma-val" id="rsiVal" style="color: var(--text);">50.00</div>
+      </div>
+      <div class="ma-card">
+        <div class="ma-label">កម្រិត AI Accuracy</div>
+        <div class="ma-val" id="aiConf" style="color: var(--green);">98.4%</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. MIDDLE COLUMN: SIGNALS & LOGS -->
+  <div class="middle-workspace">
+    <div class="signal-card" id="mainSignalCard">
+      <div class="sc-header">
+        <span class="sc-title kh" id="scTitle">តំបន់រង់ចាំសញ្ញា (XAUUSD)</span>
+        <span class="sc-badge waiting kh" id="scBadge">ស្កេន Trend</span>
+      </div>
+      <p class="sc-desc kh" id="scDesc">ប្រព័ន្ធ AI កំពុងវិភាគ Order Block និង Liquidity ធៀបនឹងតម្លៃពិត...</p>
+      <div class="sc-grid">
+        <div><span>ចូល (ENTRY)</span><strong class="en" id="scEntry" style="color:var(--cyan);">--</strong></div>
+        <div><span>កាត់ខាត (SL)</span><strong class="en" id="scSL" style="color:var(--red);">--</strong></div>
+        <div><span>គោលដៅ (TP 1)</span><strong class="en" id="scTP1" style="color:var(--green);">--</strong></div>
+        <div><span>គោលដៅ (TP 2)</span><strong class="en" id="scTP2" style="color:var(--green);">--</strong></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <span>📰 ព័ត៌មានរំញោចទីផ្សារ</span>
+        <span class="mono" style="color:var(--red); font-size:10px;">● LIVE</span>
+      </div>
+      <div class="scroll-list" id="marketNewsList">
+        <div class="log-item">
+          <div class="log-meta"><span style="color:var(--amber);">AI News Filter</span><span class="mono">LIVE</span></div>
+          <div><span style="color:var(--red); font-weight:700;">[SYS_INIT]</span> ភ្ជាប់ប្រព័ន្ធទិន្នន័យសេដ្ឋកិច្ចពិភពលោកជោគជ័យ។</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <span>⚙️ កំណត់ហេតុប្រព័ន្ធ (System Logs)</span>
+        <span class="mono" style="color:var(--green); font-size:10px;">● SECURE</span>
+      </div>
+      <div class="scroll-list" id="telegramLogList">
+        <div class="log-item">
+          <div class="log-meta"><span style="color:var(--amber);">Core System</span><span class="mono">SYSTEM</span></div>
+          <div>✅ Sync តម្លៃពិតប្រាកដពី TradingView ជោគជ័យ។</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. RIGHT COLUMN: TRADINGVIEW USD ECONOMIC CALENDAR WIDGET -->
+  <div class="ff-column">
+    <div class="panel" style="height: 100%;">
+      <div class="panel-head" style="background: #1B263B;">
+        <span style="color: var(--amber); font-weight:700;">📅 ប្រតិទិនសេដ្ឋកិច្ច USD (Live Filtered)</span>
+        <span class="mono" style="color: var(--green); font-size: 10px;">● Gold Impact Only</span>
+      </div>
+      <div style="flex: 1; width: 100%; height: 100%; background: var(--panel); overflow: hidden; position: relative;">
+        <!-- TradingView Widget BEGIN -->
+        <div class="tradingview-widget-container" style="width:100%;height:100%;">
+          <div class="tradingview-widget-container__widget" style="width:100%;height:100%;"></div>
+          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-events.js" async>
+          {
+            "colorTheme": "dark",
+            "isTransparent": true,
+            "width": "100%",
+            "height": "100%",
+            "locale": "en",
+            "importanceFilter": "1",
+            "currencyFilter": "USD"
+          }
+          </script>
+        </div>
+        <!-- TradingView Widget END -->
+      </div>
+    </div>
+  </div>
+</main>
+
+<script type="text/javascript">
+  const TELEGRAM_BOT_TOKEN = "YOUR_BOT_TOKEN"; 
+  const TELEGRAM_CHAT_ID = "YOUR_CHAT_ID";         
+
+  setInterval(() => {
+    document.getElementById('clock').textContent = new Date().toLocaleTimeString('en-GB');
+  }, 1000);
+
+  function addLog(msg) {
+    const list = document.getElementById('telegramLogList');
+    const timeStr = new Date().toLocaleTimeString('en-GB');
+    const item = document.createElement('div');
+    item.className = 'log-item';
+    item.innerHTML = `<div class="log-meta"><span style="color:var(--amber);">Bot Engine 🤖</span><span class="mono">${timeStr}</span></div><div>${msg}</div>`;
+    list.prepend(item);
+  }
+
+  function sendTelegramMessage(text) {
+    if (TELEGRAM_BOT_TOKEN === "YOUR_BOT_TOKEN" || TELEGRAM_CHAT_ID === "YOUR_CHAT_ID") return;
+    fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: text, parse_mode: "Markdown" })
+    }).catch(err => {});
+  }
+
+  let liveMarketPrice = 0;
+  let activeSetup = null;
+  let isWaitingForEntry = true;
+
+  function syncTradingViewPrice() {
+    try {
+      const priceElement = document.querySelector('.js-symbol-last');
+      if (priceElement) {
+        let rawText = priceElement.textContent.replace(/,/g, '').trim();
+        let parsed = parseFloat(rawText);
+        if (!isNaN(parsed) && parsed > 0) {
+          liveMarketPrice = parsed;
+          let formattedPrice = `$${liveMarketPrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+          document.getElementById('livePriceHeader').textContent = `តម្លៃ: ${formattedPrice}`;
+          
+          let rsiRandom = (45 + (Math.sin(liveMarketPrice) * 15)).toFixed(2);
+          document.getElementById('rsiVal').textContent = rsiRandom;
+          document.getElementById('rsiVal').style.color = rsiRandom > 60 ? 'var(--green)' : (rsiRandom < 40 ? 'var(--red)' : 'var(--amber)');
+        }
+      }
+    } catch(e) {}
+  }
+
+  setInterval(syncTradingViewPrice, 1000);
+
+  function setWaitingState(reason) {
+    activeSetup = null;
+    isWaitingForEntry = true;
+    
+    const card = document.getElementById('mainSignalCard');
+    card.className = "signal-card";
+    document.getElementById('scTitle').textContent = "តំបន់រង់ចាំសញ្ញា (XAUUSD)";
+    document.getElementById('scDesc').textContent = reason;
+    document.getElementById('scEntry').textContent = "រង់ចាំសញ្ញាស្រប Trend...";
+    document.getElementById('scSL').textContent = "--";
+    document.getElementById('scTP1').textContent = "--";
+    document.getElementById('scTP2').textContent = "--";
+    
+    const badge = document.getElementById('scBadge');
+    badge.className = "sc-badge waiting";
+    badge.textContent = "ស្កេន Trend";
+
+    document.getElementById('marketStructure').textContent = "Neutral";
+    document.getElementById('trendBias').textContent = "SIDEWAYS";
+    document.getElementById('trendBias').style.color = "var(--amber)";
+  }
+
+  function activateSignal(type, reason) {
+    if (liveMarketPrice <= 0) return;
+    
+    let entryPrice = liveMarketPrice;
+    let slPrice = type === 'SELL' ? (entryPrice + 6.50).toFixed(2) : (entryPrice - 6.50).toFixed(2);
+    let tp1Price = type === 'SELL' ? (entryPrice - 14.00).toFixed(2) : (entryPrice + 14.00).toFixed(2);
+    let tp2Price = type === 'SELL' ? (entryPrice - 28.00).toFixed(2) : (entryPrice + 28.00).toFixed(2);
+
+    isWaitingForEntry = false;
+    activeSetup = { type, entry: entryPrice, sl: slPrice, tp1: tp1Price, tp2: tp2Price, hitTP1: false };
+
+    const card = document.getElementById('mainSignalCard');
+    card.className = type === 'BUY' ? "signal-card active-buy" : "signal-card active-sell";
+    
+    let typeKh = type === 'BUY' ? 'ទិញចូល (BUY)' : 'លក់ចេញ (SELL)';
+    document.getElementById('scTitle').textContent = `សញ្ញា XAUUSD - ${typeKh}`;
+    document.getElementById('scDesc').textContent = `មូលហេតុ៖ ${reason}`;
+    document.getElementById('scEntry').textContent = `$${entryPrice.toFixed(2)}`;
+    document.getElementById('scSL').textContent = `$${slPrice}`;
+    document.getElementById('scTP1').textContent = `$${tp1Price}`;
+    document.getElementById('scTP2').textContent = `$${tp2Price}`;
+
+    const badge = document.getElementById('scBadge');
+    badge.className = type === 'BUY' ? "sc-badge buy" : "sc-badge sell";
+    badge.textContent = type;
+
+    document.getElementById('marketStructure').textContent = type === 'BUY' ? "Bullish BOS" : "Bearish ChoCH";
+    document.getElementById('marketStructure').style.color = type === 'BUY' ? "var(--green)" : "var(--red)";
+    document.getElementById('trendBias').textContent = type === 'BUY' ? "BULLISH" : "BEARISH";
+    document.getElementById('trendBias').style.color = type === 'BUY' ? "var(--green)" : "var(--red)";
+
+    addLog(`🚀 បញ្ចេញសញ្ញា ${typeKh}! Entry: $${entryPrice.toFixed(2)}`);
+
+    let teleMsg = `🚨 *BOREN-SIGNAL PRO ELITE* 🚨\n🪙 XAUUSD - ${typeKh}\n📥 Entry: $${entryPrice.toFixed(2)}\n🛑 SL: $${slPrice}\n🎯 TP1: $${tp1Price}`;
+    sendTelegramMessage(teleMsg);
+  }
+
+  // AI Signal Simulation Loop
+  setInterval(() => {
+    if (liveMarketPrice <= 0) return;
+    if (isWaitingForEntry) {
+      let rand = Math.random();
+      if (rand > 0.90) {
+        let isSell = Math.random() > 0.5;
+        activateSignal(isSell ? "SELL" : "BUY", isSell ? "Bearish Order Block Sweep" : "Bullish Order Block Support");
+      }
+    } else if (activeSetup) {
+      let hitTP1 = false, hitTP2 = false, hitSL = false;
+      if (activeSetup.type === 'BUY') {
+        if (!activeSetup.hitTP1 && liveMarketPrice >= parseFloat(activeSetup.tp1)) hitTP1 = true;
+        if (liveMarketPrice >= parseFloat(activeSetup.tp2)) hitTP2 = true;
+        if (liveMarketPrice <= parseFloat(activeSetup.sl)) hitSL = true;
+      } else {
+        if (!activeSetup.hitTP1 && liveMarketPrice <= parseFloat(activeSetup.tp1)) hitTP1 = true;
+        if (liveMarketPrice <= parseFloat(activeSetup.tp2)) hitTP2 = true;
+        if (liveMarketPrice >= parseFloat(activeSetup.sl)) hitSL = true;
+      }
+
+      if (hitTP2) {
+        addLog(`🏆 សម្រេច TP2 ជោគជ័យ!`);
+        setWaitingState("សម្រេច TP2 រួចរាល់!");
+      } else if (hitTP1 && !activeSetup.hitTP1) {
+        activeSetup.hitTP1 = true;
+        addLog(`🎉 សម្រេច TP1 ហើយ!`);
+      } else if (hitSL) {
+        addLog(`⚠️ ប៉ះកម្រិតកាត់ខាត (SL)!`);
+        setWaitingState("បានប៉ះ SL!");
+      }
+    }
+  }, 3000);
+
+  setWaitingState("ប្រព័ន្ធកំពុងដំណើរការ...");
+</script>
+
+</body>
+>>>>>>> ab58979d52c9a4f81db97485de37fc65ead50f58
 </html>

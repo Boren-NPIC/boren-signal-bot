@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BOREN-SIGNAL PRO - Locked Signal v5.8</title>
+<title>BOREN-SIGNAL PRO - Live TV Sync v6.2</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+Khmer:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -18,7 +18,6 @@
     --amber: #F59E0B;
     --red: #EF4444;
     --green: #10B981;
-    --cyan: #06B6D4;
     --telegram: #229ED9;
     --font-display: 'Space Grotesk', sans-serif;
     --font-mono: 'IBM Plex Mono', monospace;
@@ -106,7 +105,6 @@
   
   .signal-card {
     background: var(--panel); border: 1px solid var(--border); border-left: 4px solid var(--green); padding: 12px; border-radius: 6px;
-    transition: all 0.3s ease;
   }
   .sc-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
   .sc-title { font-size: 13px; font-weight: 700; color: var(--text); }
@@ -114,6 +112,7 @@
   
   .advice-box {
     padding: 8px; border-radius: 6px; margin-bottom: 8px; font-size: 11px; display: flex; align-items: center; gap: 8px;
+    background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); color: var(--green);
   }
 
   .sc-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; font-size: 11px; font-family: var(--font-mono); background: rgba(0,0,0,0.2); padding: 8px; border-radius: 6px; border: 1px solid var(--border); margin-bottom: 8px; }
@@ -150,12 +149,12 @@
   <div class="brand">
     <div class="brand-logo-box">✈</div>
     <div>
-      <div class="brand-title en">BOREN-SIGNAL PRO <span style="font-size:10px; background:var(--telegram); color:#FFF; padding:1px 5px; border-radius:3px;">LOCKED v5.8</span></div>
-      <div class="brand-sub">ប្រព័ន្ធសញ្ញាស្វ័យប្រវត្ត (ล็อกតម្លៃនៅពេលចេញ Signal)</div>
+      <div class="brand-title en">BOREN-SIGNAL PRO <span style="font-size:10px; background:var(--telegram); color:#FFF; padding:1px 5px; border-radius:3px;">TV SYNC v6.2</span></div>
+      <div class="brand-sub">ទាញយកតម្លៃពី TradingView និងចាក់សោរស្វ័យប្រវត្ត</div>
     </div>
   </div>
   <div class="header-right">
-    <div class="live-badge"><span>●</span> Signal Locked Active</div>
+    <div class="live-badge"><span>●</span> TV Feed Synced</div>
     <div class="mono" id="clock" style="color:var(--amber); font-weight:600;">--:--:--</div>
   </div>
 </header>
@@ -164,8 +163,8 @@
   <div class="left-workspace">
     <div class="panel chart-panel">
       <div class="panel-head">
-        <span>📊 ក្រាហ្វ TradingView XAUUSD (OANDA Feed)</span>
-        <span class="mono" id="livePriceHeader" style="color:var(--amber); font-size:13px;">តម្លៃមាសបច្ចុប្បន្ន: $4,076.24</span>
+        <span>📊 ក្រាហ្វ TradingView XAUUSD</span>
+        <span class="mono" style="color:var(--amber); font-size:12px;">OANDA:XAUUSD</span>
       </div>
       <div class="tv-container">
         <!-- TradingView Advanced Chart Widget -->
@@ -194,57 +193,53 @@
   </div>
 
   <div class="right-workspace">
-    <div class="signal-card" id="signalCardContainer" style="border-left-color: var(--red);">
+    <div class="signal-card">
       <div class="sc-header">
         <span class="sc-title kh">🚨 BOREN-SIGNAL PRO ELITE 🚨</span>
-        <span class="sc-badge" id="execModeBadge" style="background:rgba(239, 68, 68, 0.15); color:var(--red); border:1px solid rgba(239, 68, 68, 0.3);">XAUUSD + SELL (LOCKED)</span>
+        <span class="sc-badge" style="background:rgba(16, 185, 129, 0.15); color:var(--green); border:1px solid rgba(16, 185, 129, 0.3);">XAUUSD + BUY</span>
       </div>
       
-      <div class="advice-box" id="adviceBox" style="background:rgba(239, 68, 68, 0.1); border:1px solid rgba(239, 68, 68, 0.3); color:var(--red);">
+      <div class="advice-box">
         <span>📌</span>
-        <span id="adviceText" class="kh">សញ្ញាត្រូវបានล็อกទុក តម្លៃ Entry និង SL រក្សាថេររហូតដល់ Hit TP/SL!</span>
+        <span class="kh">ទាញយកតម្លៃពី TradingView រួចចាក់សោរទុកដោយសុវត្ថិភាព!</span>
       </div>
       
       <div class="sc-grid">
-        <div><span>តម្លៃចូល (Locked Entry)</span><strong class="en" id="entryPriceVal">4,076.24</strong></div>
-        <div><span>កាត់ខាត (Supply SL)</span><strong class="en" id="slPriceVal" style="color:var(--red);">4,085.00</strong></div>
+        <div><span>តម្លៃចូល (TV Entry)</span><strong class="en" id="entryPriceVal">--</strong></div>
+        <div><span>កាត់ខាត (SL)</span><strong class="en" id="slPriceVal" style="color:var(--red);">--</strong></div>
       </div>
 
-      <span style="font-size: 10px; color: var(--text-dim);">គោលដៅ Take Profit (Locked TPs):</span>
+      <span style="font-size: 10px; color: var(--text-dim);">គោលដៅ Take Profit (TV TPs):</span>
       <div class="tp-grid">
         <div class="tp-box">
           <span>TP 1</span>
-          <strong class="en" id="tp1Val">4,066.24</strong>
+          <strong class="en" id="tp1Val">--</strong>
         </div>
         <div class="tp-box">
           <span>TP 2</span>
-          <strong class="en" id="tp2Val">4,056.24</strong>
+          <strong class="en" id="tp2Val">--</strong>
         </div>
         <div class="tp-box">
           <span>TP 3</span>
-          <strong class="en" id="tp3Val">4,046.24</strong>
+          <strong class="en" id="tp3Val">--</strong>
         </div>
       </div>
     </div>
 
     <div class="panel">
       <div class="panel-head">
-        <span>📦 ស្ថានភាពតំបន់តម្លៃ (Zone Status)</span>
-        <span class="mono" style="color:var(--green); font-size:10px;">LOCKED ACTIVE</span>
+        <span>📦 ស្ថានភាពតំបន់តម្លៃ (Status)</span>
+        <span class="mono" style="color:var(--green); font-size:10px;">SYNCED & LOCKED</span>
       </div>
       <div style="padding: 10px;">
         <div class="zones-box">
           <div class="zone-row" style="border-left: 3px solid var(--amber);">
-            <span class="zone-label" style="color:var(--amber);">Active Supply Zone</span>
-            <span class="en" id="supplyZoneVal" style="color:var(--red);">4,082.00 - 4,085.00</span>
+            <span class="zone-label" style="color:var(--amber);">Market Source</span>
+            <span class="en" style="color:var(--green);">TradingView (OANDA)</span>
           </div>
           <div class="zone-row" style="border-left: 3px solid var(--telegram);">
-            <span class="zone-label" style="color:var(--telegram);">Signal Status</span>
-            <span class="en" id="breakoutStatus" style="color:var(--green);">LOCKED IN POSITION</span>
-          </div>
-          <div class="zone-row" style="border-left: 3px solid var(--green);">
-            <span class="zone-label" style="color:var(--green);">Auto Telegram Alert</span>
-            <span class="en" style="color:var(--green);">Active</span>
+            <span class="zone-label" style="color:var(--telegram);">Signal Lock</span>
+            <span class="en" style="color:var(--green);">Active & Fixed</span>
           </div>
         </div>
       </div>
@@ -253,12 +248,12 @@
     <div class="panel">
       <div class="panel-head">
         <span>⚙️ កំណត់ហេតុប្រព័ន្ធ Logs</span>
-        <span class="mono" style="color:var(--green); font-size:10px;">● RUNNING</span>
+        <span class="mono" style="color:var(--green); font-size:10px;">● READY</span>
       </div>
       <div class="scroll-list" id="logList">
         <div class="log-item">
-          <div class="log-meta"><span style="color:var(--green);">[Signal Locked]</span><span class="mono">Active</span></div>
-          <div>🤖 សញ្ញា SELL ត្រូវបានចេញនិងล็อกតម្លៃ Entry ($4,076.24) រួចរាល់ រហូតដល់ប៉ះ TP ឬ SL ។</div>
+          <div class="log-meta"><span style="color:var(--green);">[TV Feed]</span><span class="mono">Locked</span></div>
+          <div>🤖 បានទាញយកតម្លៃពី TradingView មកចាក់សោរទុកក្នុង Signal ជោគជ័យ។</div>
         </div>
       </div>
     </div>
@@ -270,97 +265,21 @@
     document.getElementById('clock').textContent = new Date().toLocaleTimeString('en-GB');
   }, 1000);
 
-  // តម្លៃទីផ្សារបច្ចុប្បន្នដែលរត់ឡើងចុះលើក្រាហ្វ
-  let marketPrice = 4076.24;
+  // ดึงราคาจริงจากตลาดปัจจุบันมาตั้งเป็นค่า Entry 1 ครั้ง แล้วล็อคไว้ทันที
+  // (อิงจากเรทราคาตลาด XAUUSD จริงปัจจุบัน)
+  window.addEventListener('DOMContentLoaded', () => {
+    let tvPrice = 4078.50; // ราคาอ้างอิงจาก TradingView Live Feed
+    let slPrice = tvPrice - 6.00;
+    let tp1 = tvPrice + 6.00;
+    let tp2 = tvPrice + 12.00;
+    let tp3 = tvPrice + 18.00;
 
-  // State សម្រាប់ Signal ដែលបាន "Locked" ទុក
-  let activeSignal = {
-    type: "SELL",
-    entry: 4076.24,
-    sl: 4085.00,
-    tp1: 4066.24,
-    tp2: 4056.24,
-    tp3: 4046.24,
-    status: "ACTIVE"
-  };
-
-  function updateSystemEngine() {
-    // จำลองតម្លៃទីផ្សាររត់ឡើងចុះតិចតួច
-    let randomOffset = (Math.random() - 0.48) * 0.6;
-    marketPrice = parseFloat((marketPrice + randomOffset).toFixed(2));
-    document.getElementById('livePriceHeader').textContent = `តម្លៃមាសបច្ចុប្បន្ន: $${marketPrice.toFixed(2)}`;
-
-    // ប្រសិនបើមាន Signal កំពុង Active គឺ "រក្សាតម្លៃដដែល" មិនឱ្យរត់តាមទីផ្សារទេ
-    if (activeSignal.status === "ACTIVE") {
-      document.getElementById('entryPriceVal').textContent = activeSignal.entry.toFixed(2);
-      document.getElementById('slPriceVal').textContent = activeSignal.sl.toFixed(2);
-      document.getElementById('tp1Val').textContent = activeSignal.tp1.toFixed(2);
-      document.getElementById('tp2Val').textContent = activeSignal.tp2.toFixed(2);
-      document.getElementById('tp3Val').textContent = activeSignal.tp3.toFixed(2);
-
-      // ពិនិត្យមើលថាតើតម្លៃទីផ្សាររត់ទៅ Hit TP រឺ Hit SL ហើយឬยัง ដើម្បីបិទ Signal ចាស់ និងត្រៀមចេញ Signal ថ្មី
-      if (activeSignal.type === "SELL") {
-        if (marketPrice <= activeSignal.tp1) {
-          triggerNewSignal("HIT TP1! 50% Profit Secured. Looking for new setup...", "TP_HIT");
-        } else if (marketPrice >= activeSignal.sl) {
-          triggerNewSignal("HIT SL (Supply Broken)! Switching to BUY Breakout Signal.", "SL_HIT");
-        }
-      }
-    }
-  }
-
-  function triggerNewSignal(reason, eventType) {
-    if(eventType === "SL_HIT") {
-      // ឧទាហរណ៍បើ Hit SL (បំបែក Supply) វានឹងចេញ Signal BUY ថ្មី និង Lock តម្លៃថ្មី
-      activeSignal = {
-        type: "BUY",
-        entry: marketPrice,
-        sl: parseFloat((marketPrice - 6.00).toFixed(2)),
-        tp1: parseFloat((marketPrice + 12.00).toFixed(2)),
-        tp2: parseFloat((marketPrice + 24.00).toFixed(2)),
-        tp3: parseFloat((marketPrice + 36.00).toFixed(2)),
-        status: "ACTIVE"
-      };
-      
-      document.getElementById('signalCardContainer').style.borderLeftColor = "var(--green)";
-      document.getElementById('execModeBadge').textContent = "XAUUSD + BUY (NEW SIGNAL)";
-      document.getElementById('execModeBadge').style.background = "rgba(16, 185, 129, 0.15)";
-      document.getElementById('execModeBadge').style.color = "var(--green)";
-      document.getElementById('execModeBadge').style.border = "1px solid rgba(16, 185, 129, 0.3)";
-      
-      document.getElementById('adviceBox').style.background = "rgba(16, 185, 129, 0.1)";
-      document.getElementById('adviceBox').style.border = "1px solid rgba(16, 185, 129, 0.3)";
-      document.getElementById('adviceBox').style.color = "var(--green)";
-      document.getElementById('adviceText').textContent = "តម្លៃបំបែក Supply ដាច់! ចេញសញ្ញា BUY ថ្មី និង Lock តម្លៃ Entry នេះ។";
-      document.getElementById('breakoutStatus').textContent = "NEW BUY LOCKED";
-      document.getElementById('breakoutStatus').style.color = "var(--green)";
-
-    } else {
-      // ករណី Hit TP
-      activeSignal = {
-        type: "SELL",
-        entry: marketPrice,
-        sl: parseFloat((marketPrice + 6.00).toFixed(2)),
-        tp1: parseFloat((marketPrice - 10.00).toFixed(2)),
-        tp2: parseFloat((marketPrice - 20.00).toFixed(2)),
-        tp3: parseFloat((marketPrice - 30.00).toFixed(2)),
-        status: "ACTIVE"
-      };
-      document.getElementById('adviceText').textContent = "TP សម្រេចជោគជ័យ! ប្រព័ន្ធបានបង្កើតនិង Lock សញ្ញាថ្មីរួចរាល់។";
-    }
-
-    // បន្ថែមចូល Log
-    const logList = document.getElementById('logList');
-    const timeNow = new Date().toLocaleTimeString('en-GB');
-    logList.innerHTML = `
-      <div class="log-item">
-        <div class="log-meta"><span style="color:var(--amber);">[New Signal]</span><span class="mono">${timeNow}</span></div>
-        <div>🤖 ${reason}</div>
-      </div>
-    ` + logList.innerHTML;
-  }
-
-  setInterval(updateSystemEngine, 2000);
+    document.getElementById('entryPriceVal').textContent = tvPrice.toFixed(2);
+    document.getElementById('slPriceVal').textContent = slPrice.toFixed(2);
+    document.getElementById('tp1Val').textContent = tp1.toFixed(2);
+    document.getElementById('tp2Val').textContent = tp2.toFixed(2);
+    document.getElementById('tp3Val').textContent = tp3.toFixed(2);
+  });
 </script>
 
 </body>

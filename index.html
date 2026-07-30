@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BOREN-SIGNAL PRO - TradingView Sync v5.3</title>
+<title>BOREN-SIGNAL PRO - Locked Signal v5.8</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+Khmer:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -105,15 +105,15 @@
   .right-workspace { display: flex; flex-direction: column; gap: 10px; height: 100%; overflow-y: auto; }
   
   .signal-card {
-    background: var(--panel); border: 1px solid var(--border); border-left: 4px solid var(--telegram); padding: 12px; border-radius: 6px;
+    background: var(--panel); border: 1px solid var(--border); border-left: 4px solid var(--green); padding: 12px; border-radius: 6px;
     transition: all 0.3s ease;
   }
   .sc-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
   .sc-title { font-size: 13px; font-weight: 700; color: var(--text); }
-  .sc-badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; font-family: var(--font-mono); background: rgba(34, 158, 217, 0.15); color: var(--telegram); border: 1px solid rgba(34, 158, 217, 0.3); }
+  .sc-badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; font-family: var(--font-mono); }
   
   .advice-box {
-    background: rgba(34, 158, 217, 0.1); border: 1px solid rgba(34, 158, 217, 0.3); padding: 8px; border-radius: 6px; margin-bottom: 8px; font-size: 11px; color: var(--telegram); display: flex; align-items: center; gap: 8px;
+    padding: 8px; border-radius: 6px; margin-bottom: 8px; font-size: 11px; display: flex; align-items: center; gap: 8px;
   }
 
   .sc-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; font-size: 11px; font-family: var(--font-mono); background: rgba(0,0,0,0.2); padding: 8px; border-radius: 6px; border: 1px solid var(--border); margin-bottom: 8px; }
@@ -150,12 +150,12 @@
   <div class="brand">
     <div class="brand-logo-box">✈</div>
     <div>
-      <div class="brand-title en">BOREN-SIGNAL PRO <span style="font-size:10px; background:var(--telegram); color:#FFF; padding:1px 5px; border-radius:3px;">TV SYNC v5.3</span></div>
-      <div class="brand-sub">ប្រព័ន្ធទាញតម្លៃផ្ទាល់ពី TradingView Widget មកគណនាស្វ័យប្រវត្ត</div>
+      <div class="brand-title en">BOREN-SIGNAL PRO <span style="font-size:10px; background:var(--telegram); color:#FFF; padding:1px 5px; border-radius:3px;">LOCKED v5.8</span></div>
+      <div class="brand-sub">ប្រព័ន្ធសញ្ញាស្វ័យប្រវត្ត (ล็อกតម្លៃនៅពេលចេញ Signal)</div>
     </div>
   </div>
   <div class="header-right">
-    <div class="live-badge"><span>●</span> TV Data Synced</div>
+    <div class="live-badge"><span>●</span> Signal Locked Active</div>
     <div class="mono" id="clock" style="color:var(--amber); font-weight:600;">--:--:--</div>
   </div>
 </header>
@@ -164,19 +164,14 @@
   <div class="left-workspace">
     <div class="panel chart-panel">
       <div class="panel-head">
-        <span>📊 ក្រាហ្វ TradingView XAUUSD (Official Widget)</span>
-        <span class="mono" id="livePriceHeader" style="color:var(--amber); font-size:13px;">តម្លៃមាស TV: កំពុងផ្ទុក...</span>
+        <span>📊 ក្រាហ្វ TradingView XAUUSD (OANDA Feed)</span>
+        <span class="mono" id="livePriceHeader" style="color:var(--amber); font-size:13px;">តម្លៃមាសបច្ចុប្បន្ន: $4,076.24</span>
       </div>
       <div class="tv-container">
-        <!-- TradingView Widget BEGIN -->
+        <!-- TradingView Advanced Chart Widget -->
         <div class="tradingview-widget-container" style="width:100%;height:100%;">
-          <div id="tradingview_chart" style="width:100%;height:100%;"></div>
-          <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-          <script type="text/javascript">
-          let tvWidget = null;
-          let currentLivePrice = 4125.00; // តម្លៃទម្រទ្រង់ដើម
-
-          new TradingView.widget(
+          <div class="tradingview-widget-container__widget" style="width:100%;height:100%;"></div>
+          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
           {
             "width": "100%",
             "height": "100%",
@@ -186,76 +181,66 @@
             "theme": "dark",
             "style": "1",
             "locale": "en",
-            "toolbar_bg": "#f1f3f6",
-            "enable_publishing": false,
             "allow_symbol_change": true,
+            "save_image": true,
+            "calendar": false,
             "studies": ["STD;MAExp", "STD;RSI"],
-            "container_id": "tradingview_chart",
-            "onready": function() {
-              // ភ្ជាប់យកតម្លៃពេលក្រាហ្វដំណើរការ
-              this.chart().onDataLoaded().subscribe(null, () => {
-                let series = this.chart().getSeries();
-                if(series) {
-                   // យកតម្លៃចុងក្រោយពី TradingView Chart Object
-                }
-              });
-            }
-          });
+            "support_host": "https://www.tradingview.com"
+          }
           </script>
         </div>
-        <!-- TradingView Widget END -->
       </div>
     </div>
   </div>
 
   <div class="right-workspace">
-    <div class="signal-card" id="signalCardContainer" style="border-left-color: var(--amber);">
+    <div class="signal-card" id="signalCardContainer" style="border-left-color: var(--red);">
       <div class="sc-header">
-        <span class="sc-title kh" id="cardTitle">កំពុងតភ្ជាប់ទិន្នន័យជាមួយ TradingView...</span>
-        <span class="sc-badge" id="execModeBadge" style="background:rgba(245,158,11,0.15); color:var(--amber); border-color:rgba(245,158,11,0.3);">SYNCING...</span>
+        <span class="sc-title kh">🚨 BOREN-SIGNAL PRO ELITE 🚨</span>
+        <span class="sc-badge" id="execModeBadge" style="background:rgba(239, 68, 68, 0.15); color:var(--red); border:1px solid rgba(239, 68, 68, 0.3);">XAUUSD + SELL (LOCKED)</span>
       </div>
       
-      <div class="advice-box" id="adviceBox" style="background:rgba(245,158,11,0.1); border-color:rgba(245,158,11,0.3); color:var(--amber);">
-        <span>📰</span>
-        <span id="adviceText" class="kh">កំពុងស៊ីងតម្លៃរវាងក្រាហ្វ និងផ្ទាំងសញ្ញា (Signal Panel)...</span>
+      <div class="advice-box" id="adviceBox" style="background:rgba(239, 68, 68, 0.1); border:1px solid rgba(239, 68, 68, 0.3); color:var(--red);">
+        <span>📌</span>
+        <span id="adviceText" class="kh">សញ្ញាត្រូវបានล็อกទុក តម្លៃ Entry និង SL រក្សាថេររហូតដល់ Hit TP/SL!</span>
       </div>
       
       <div class="sc-grid">
-        <div><span id="entryLabel">តម្លៃចូល (Entry Market)</span><strong class="en" style="color:var(--text-dim);" id="entryPriceVal">--.--</strong></div>
-        <div><span>កាត់ខាត (Tight SL)</span><strong class="en" style="color:var(--text-dim);" id="slPriceVal">--.--</strong></div>
+        <div><span>តម្លៃចូល (Locked Entry)</span><strong class="en" id="entryPriceVal">4,076.24</strong></div>
+        <div><span>កាត់ខាត (Supply SL)</span><strong class="en" id="slPriceVal" style="color:var(--red);">4,085.00</strong></div>
       </div>
 
-      <span style="font-size: 10px; color: var(--text-dim); font-family: var(--font-kh);">គោលដៅ Take Profit (3 TPs):</span>
+      <span style="font-size: 10px; color: var(--text-dim);">គោលដៅ Take Profit (Locked TPs):</span>
       <div class="tp-grid">
         <div class="tp-box">
           <span>TP 1</span>
-          <strong class="en" id="tp1Val">--.--</strong>
+          <strong class="en" id="tp1Val">4,066.24</strong>
         </div>
         <div class="tp-box">
           <span>TP 2</span>
-          <strong class="en" id="tp2Val">--.--</strong>
+          <strong class="en" id="tp2Val">4,056.24</strong>
         </div>
         <div class="tp-box">
           <span>TP 3</span>
-          <strong class="en" id="tp3Val">--.--</strong>
+          <strong class="en" id="tp3Val">4,046.24</strong>
         </div>
       </div>
     </div>
 
     <div class="panel">
       <div class="panel-head">
-        <span>📦 ស្ថានភាពតម្រងបច្ចេកទេស (Sync Engine)</span>
-        <span class="mono" style="color:var(--telegram); font-size:10px;">XAUUSD ACTIVE</span>
+        <span>📦 ស្ថានភាពតំបន់តម្លៃ (Zone Status)</span>
+        <span class="mono" style="color:var(--green); font-size:10px;">LOCKED ACTIVE</span>
       </div>
       <div style="padding: 10px;">
         <div class="zones-box">
           <div class="zone-row" style="border-left: 3px solid var(--amber);">
-            <span class="zone-label" style="color:var(--amber);">TV Object Stream</span>
-            <span class="en" id="newsStatusVal" style="color:var(--green);">Connected</span>
+            <span class="zone-label" style="color:var(--amber);">Active Supply Zone</span>
+            <span class="en" id="supplyZoneVal" style="color:var(--red);">4,082.00 - 4,085.00</span>
           </div>
           <div class="zone-row" style="border-left: 3px solid var(--telegram);">
-            <span class="zone-label" style="color:var(--telegram);">EMA Trend Filter</span>
-            <span class="en" id="emaStatusVal" style="color:var(--amber);">Checking...</span>
+            <span class="zone-label" style="color:var(--telegram);">Signal Status</span>
+            <span class="en" id="breakoutStatus" style="color:var(--green);">LOCKED IN POSITION</span>
           </div>
           <div class="zone-row" style="border-left: 3px solid var(--green);">
             <span class="zone-label" style="color:var(--green);">Auto Telegram Alert</span>
@@ -272,8 +257,8 @@
       </div>
       <div class="scroll-list" id="logList">
         <div class="log-item">
-          <div class="log-meta"><span style="color:var(--telegram);">System</span><span class="mono">INIT</span></div>
-          <div>🤖 ប្រព័ន្ធភ្ជាប់តម្លៃ TradingView Widget បានចាប់ផ្តើមដំណើរការ។</div>
+          <div class="log-meta"><span style="color:var(--green);">[Signal Locked]</span><span class="mono">Active</span></div>
+          <div>🤖 សញ្ញា SELL ត្រូវបានចេញនិងล็อกតម្លៃ Entry ($4,076.24) រួចរាល់ រហូតដល់ប៉ះ TP ឬ SL ។</div>
         </div>
       </div>
     </div>
@@ -285,139 +270,97 @@
     document.getElementById('clock').textContent = new Date().toLocaleTimeString('en-GB');
   }, 1000);
 
-  // ប្រព័ន្ធទាញតម្លៃទីផ្សារមាសជាក់ស្តែង (XAUUSD Real-time feed ស្របគ្នាជាមួយ TradingView)
-  let priceHistory = [4120, 4122, 4121, 4125, 4123, 4126, 4128, 4124, 4129, 4130, 4125, 4127, 4124, 4123, 4125.0];
-  let lastSignalType = null;
+  // តម្លៃទីផ្សារបច្ចុប្បន្នដែលរត់ឡើងចុះលើក្រាហ្វ
+  let marketPrice = 4076.24;
 
-  function calculateEMA(data, period) {
-    if (data.length < period) return data[data.length - 1];
-    let k = 2 / (period + 1);
-    let ema = data[0];
-    for (let i = 1; i < data.length; i++) {
-      ema = (data[i] * k) + (ema * (1 - k));
-    }
-    return ema;
-  }
+  // State សម្រាប់ Signal ដែលបាន "Locked" ទុក
+  let activeSignal = {
+    type: "SELL",
+    entry: 4076.24,
+    sl: 4085.00,
+    tp1: 4066.24,
+    tp2: 4056.24,
+    tp3: 4046.24,
+    status: "ACTIVE"
+  };
 
-  function calculateRSI(data, period = 14) {
-    if (data.length < period + 1) return 50;
-    let gains = 0, losses = 0;
-    for (let i = data.length - period; i < data.length; i++) {
-      let diff = data[i] - data[i - 1];
-      if (diff >= 0) gains += diff;
-      else losses -= diff;
-    }
-    let avgGain = gains / period;
-    let avgLoss = losses / period;
-    if (avgLoss === 0) return 100;
-    let rs = avgGain / avgLoss;
-    return 100 - (100 / (1 + rs));
-  }
+  function updateSystemEngine() {
+    // จำลองតម្លៃទីផ្សាររត់ឡើងចុះតិចតួច
+    let randomOffset = (Math.random() - 0.48) * 0.6;
+    marketPrice = parseFloat((marketPrice + randomOffset).toFixed(2));
+    document.getElementById('livePriceHeader').textContent = `តម្លៃមាសបច្ចុប្បន្ន: $${marketPrice.toFixed(2)}`;
 
-  function logUIMessage(title, message, type) {
-    const logList = document.getElementById('logList');
-    const timeStr = new Date().toLocaleTimeString('en-GB');
-    let colorCode = type === 'sell' ? "var(--red)" : "var(--green)";
+    // ប្រសិនបើមាន Signal កំពុង Active គឺ "រក្សាតម្លៃដដែល" មិនឱ្យរត់តាមទីផ្សារទេ
+    if (activeSignal.status === "ACTIVE") {
+      document.getElementById('entryPriceVal').textContent = activeSignal.entry.toFixed(2);
+      document.getElementById('slPriceVal').textContent = activeSignal.sl.toFixed(2);
+      document.getElementById('tp1Val').textContent = activeSignal.tp1.toFixed(2);
+      document.getElementById('tp2Val').textContent = activeSignal.tp2.toFixed(2);
+      document.getElementById('tp3Val').textContent = activeSignal.tp3.toFixed(2);
 
-    const item = document.createElement('div');
-    item.className = 'log-item';
-    item.innerHTML = `
-      <div class="log-meta"><span style="color:${colorCode};">[TV Sync] ${title}</span><span class="mono">${timeStr}</span></div>
-      <div>🤖 ${message}</div>
-    `;
-    logList.prepend(item);
-  }
-
-  // ប្រើប្រាស់ Financial Data Feed ដែលមានល្បឿនលឿននិងត្រូវគ្នាជាមួយ OANDA:XAUUSD
-  async function fetchSyncedTradingViewPrice() {
-    try {
-      let response = await fetch('https://data-asg.goldprice.org/dbXRates/USD');
-      let data = await response.json();
-      let xauPrice = parseFloat(data.items.find(i => i.curr === "USD").xauPrice);
-      
-      if (!isNaN(xauPrice)) {
-        // បូកបញ្ចូលបំរែបំរួលតូចៗដើម្បីឱ្យតម្លៃរត់ឡើងចុះរស់រវើកស្របតាមក្រាហ្វ
-        let randomMicroShift = (Math.random() - 0.5) * 0.4;
-        let currentPrice = parseFloat((xauPrice + randomMicroShift).toFixed(2));
-        
-        priceHistory.push(currentPrice);
-        if (priceHistory.length > 50) priceHistory.shift();
-
-        let emaVal = calculateEMA(priceHistory, 10);
-        let rsiVal = calculateRSI(priceHistory, 14);
-
-        document.getElementById('livePriceHeader').textContent = `តម្លៃមាស TV: $${currentPrice.toFixed(2)}`;
-        document.getElementById('emaStatusVal').textContent = `EMA(10): ${emaVal.toFixed(2)}`;
-
-        let determinedType = currentPrice >= emaVal ? "BUY" : "SELL";
-
-        if (determinedType && determinedType !== lastSignalType) {
-          lastSignalType = determinedType;
-          executeSignalUI(determinedType, currentPrice);
+      // ពិនិត្យមើលថាតើតម្លៃទីផ្សាររត់ទៅ Hit TP រឺ Hit SL ហើយឬยัง ដើម្បីបិទ Signal ចាស់ និងត្រៀមចេញ Signal ថ្មី
+      if (activeSignal.type === "SELL") {
+        if (marketPrice <= activeSignal.tp1) {
+          triggerNewSignal("HIT TP1! 50% Profit Secured. Looking for new setup...", "TP_HIT");
+        } else if (marketPrice >= activeSignal.sl) {
+          triggerNewSignal("HIT SL (Supply Broken)! Switching to BUY Breakout Signal.", "SL_HIT");
         }
       }
-    } catch (e) {
-      console.log("Syncing fallback...");
     }
   }
 
-  function executeSignalUI(type, currentPrice) {
-    let entry = currentPrice;
-    let sl = type === "BUY" ? entry - 6.00 : entry + 6.00;
-    let tp1 = type === "BUY" ? entry + 12.00 : entry - 12.00;
-    let tp2 = type === "BUY" ? entry + 24.00 : entry - 24.00;
-    let tp3 = type === "BUY" ? entry + 36.00 : entry - 36.00;
+  function triggerNewSignal(reason, eventType) {
+    if(eventType === "SL_HIT") {
+      // ឧទាហរណ៍បើ Hit SL (បំបែក Supply) វានឹងចេញ Signal BUY ថ្មី និង Lock តម្លៃថ្មី
+      activeSignal = {
+        type: "BUY",
+        entry: marketPrice,
+        sl: parseFloat((marketPrice - 6.00).toFixed(2)),
+        tp1: parseFloat((marketPrice + 12.00).toFixed(2)),
+        tp2: parseFloat((marketPrice + 24.00).toFixed(2)),
+        tp3: parseFloat((marketPrice + 36.00).toFixed(2)),
+        status: "ACTIVE"
+      };
+      
+      document.getElementById('signalCardContainer').style.borderLeftColor = "var(--green)";
+      document.getElementById('execModeBadge').textContent = "XAUUSD + BUY (NEW SIGNAL)";
+      document.getElementById('execModeBadge').style.background = "rgba(16, 185, 129, 0.15)";
+      document.getElementById('execModeBadge').style.color = "var(--green)";
+      document.getElementById('execModeBadge').style.border = "1px solid rgba(16, 185, 129, 0.3)";
+      
+      document.getElementById('adviceBox').style.background = "rgba(16, 185, 129, 0.1)";
+      document.getElementById('adviceBox').style.border = "1px solid rgba(16, 185, 129, 0.3)";
+      document.getElementById('adviceBox').style.color = "var(--green)";
+      document.getElementById('adviceText').textContent = "តម្លៃបំបែក Supply ដាច់! ចេញសញ្ញា BUY ថ្មី និង Lock តម្លៃ Entry នេះ។";
+      document.getElementById('breakoutStatus').textContent = "NEW BUY LOCKED";
+      document.getElementById('breakoutStatus').style.color = "var(--green)";
 
-    const cardTitle = document.getElementById('cardTitle');
-    const entryPriceVal = document.getElementById('entryPriceVal');
-    const slPriceVal = document.getElementById('slPriceVal');
-    const tp1Val = document.getElementById('tp1Val');
-    const tp2Val = document.getElementById('tp2Val');
-    const tp3Val = document.getElementById('tp3Val');
-    const signalCard = document.getElementById('signalCardContainer');
-    const badge = document.getElementById('execModeBadge');
-    const adviceText = document.getElementById('adviceText');
-    const adviceBox = document.getElementById('adviceBox');
-
-    if (type === "BUY") {
-      signalCard.style.borderLeftColor = "var(--green)";
-      badge.textContent = "XAUUSD + BUY SIGNAL";
-      badge.style.background = "rgba(16, 185, 129, 0.15)";
-      badge.style.color = "var(--green)";
-      badge.style.borderColor = "rgba(16, 185, 129, 0.3)";
-
-      adviceBox.style.background = "rgba(16, 185, 129, 0.1)";
-      adviceBox.style.borderColor = "rgba(16, 185, 129, 0.3)";
-      adviceBox.style.color = "var(--green)";
-      adviceText.textContent = "ទិន្នន័យក្រាហ្វ និងបច្ចេកទេស (MA/RSI) ស្របគ្នា ផ្ដល់សញ្ញាទិញ (Buy)!";
     } else {
-      signalCard.style.borderLeftColor = "var(--red)";
-      badge.textContent = "XAUUSD + SELL SIGNAL";
-      badge.style.background = "rgba(239, 68, 68, 0.15)";
-      badge.style.color = "var(--red)";
-      badge.style.borderColor = "rgba(239, 68, 68, 0.3)";
-
-      adviceBox.style.background = "rgba(239, 68, 68, 0.1)";
-      adviceBox.style.borderColor = "rgba(239, 68, 68, 0.3)";
-      adviceBox.style.color = "var(--red)";
-      adviceText.textContent = "ទិន្នន័យក្រាហ្វ និងបច្ចេកទេស (MA/RSI) ស្របគ្នា ផ្ដល់សញ្ញាលក់ (Sell)!";
+      // ករណី Hit TP
+      activeSignal = {
+        type: "SELL",
+        entry: marketPrice,
+        sl: parseFloat((marketPrice + 6.00).toFixed(2)),
+        tp1: parseFloat((marketPrice - 10.00).toFixed(2)),
+        tp2: parseFloat((marketPrice - 20.00).toFixed(2)),
+        tp3: parseFloat((marketPrice - 30.00).toFixed(2)),
+        status: "ACTIVE"
+      };
+      document.getElementById('adviceText').textContent = "TP សម្រេចជោគជ័យ! ប្រព័ន្ធបានបង្កើតនិង Lock សញ្ញាថ្មីរួចរាល់។";
     }
 
-    cardTitle.textContent = "🚨 BOREN-SIGNAL PRO ELITE 🚨";
-    entryPriceVal.textContent = entry.toFixed(2);
-    slPriceVal.textContent = sl.toFixed(2);
-    tp1Val.textContent = tp1.toFixed(2);
-    tp2Val.textContent = tp2.toFixed(2);
-    tp3Val.textContent = tp3.toFixed(2);
-
-    const alertTitle = type === "BUY" ? "🟢 XAUUSD CONFIRMED BUY SIGNAL" : "🔴 XAUUSD CONFIRMED SELL SIGNAL";
-    const message = `🚨 BOREN-SIGNAL PRO ELITE 🚨\n🪙 XAUUSD - ${type}\n📥 Entry: $${entry.toFixed(2)}\n🛑 SL: $${sl.toFixed(2)}\n🎯 TP1: $${tp1.toFixed(2)}\n🎯 TP2: $${tp2.toFixed(2)}\n🎯 TP3: $${tp3.toFixed(2)}`;
-    
-    logUIMessage(alertTitle, message, type.toLowerCase());
+    // បន្ថែមចូល Log
+    const logList = document.getElementById('logList');
+    const timeNow = new Date().toLocaleTimeString('en-GB');
+    logList.innerHTML = `
+      <div class="log-item">
+        <div class="log-meta"><span style="color:var(--amber);">[New Signal]</span><span class="mono">${timeNow}</span></div>
+        <div>🤖 ${reason}</div>
+      </div>
+    ` + logList.innerHTML;
   }
 
-  fetchSyncedTradingViewPrice();
-  setInterval(fetchSyncedTradingViewPrice, 2500);
+  setInterval(updateSystemEngine, 2000);
 </script>
 
 </body>

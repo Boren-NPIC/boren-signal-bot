@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BOREN-SIGNAL PRO - News + Auto Technical Analysis v5.1</title>
+<title>BOREN-SIGNAL PRO - News + Auto Technical Analysis v5.2</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+Khmer:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -150,12 +150,12 @@
   <div class="brand">
     <div class="brand-logo-box">✈</div>
     <div>
-      <div class="brand-title en">BOREN-SIGNAL PRO <span style="font-size:10px; background:var(--telegram); color:#FFF; padding:1px 5px; border-radius:3px;">NEWS + TECH v5.1</span></div>
-      <div class="brand-sub">ប្រព័ន្ធតាមដានព័ត៌មាន និងវិភាគបច្ចេកទេសស្វ័យប្រវត្ត</div>
+      <div class="brand-title en">BOREN-SIGNAL PRO <span style="font-size:10px; background:var(--telegram); color:#FFF; padding:1px 5px; border-radius:3px;">NEWS + TECH v5.2</span></div>
+      <div class="brand-sub">ប្រព័ន្ធតាមដានព័ត៌មាន និងវិភាគបច្ចេកទេសស្វ័យប្រវត្ត (XAUUSD Real-Time)</div>
     </div>
   </div>
   <div class="header-right">
-    <div class="live-badge"><span>●</span> News & API Active</div>
+    <div class="live-badge"><span>●</span> XAUUSD Live API Active</div>
     <div class="mono" id="clock" style="color:var(--amber); font-weight:600;">--:--:--</div>
   </div>
 </header>
@@ -165,7 +165,7 @@
     <div class="panel chart-panel">
       <div class="panel-head">
         <span>📊 ក្រាហ្វ TradingView XAUUSD (News Filtered Engine)</span>
-        <span class="mono" id="livePriceHeader" style="color:var(--amber); font-size:13px;">តម្លៃ API: កំពុងផ្ទុក...</span>
+        <span class="mono" id="livePriceHeader" style="color:var(--amber); font-size:13px;">តម្លៃមាស API: កំពុងផ្ទុក...</span>
       </div>
       <div class="tv-container">
         <div class="tradingview-widget-container" style="width:100%;height:100%;">
@@ -195,13 +195,13 @@
   <div class="right-workspace">
     <div class="signal-card" id="signalCardContainer" style="border-left-color: var(--amber);">
       <div class="sc-header">
-        <span class="sc-title kh" id="cardTitle">កំពុងពិនិត្យព័ត៌មានទីផ្សារ...</span>
-        <span class="sc-badge" id="execModeBadge" style="background:rgba(245,158,11,0.15); color:var(--amber); border-color:rgba(245,158,11,0.3);">CHECKING NEWS</span>
+        <span class="sc-title kh" id="cardTitle">កំពុងពិនិត្យតម្លៃទីផ្សារមាសពិត...</span>
+        <span class="sc-badge" id="execModeBadge" style="background:rgba(245,158,11,0.15); color:var(--amber); border-color:rgba(245,158,11,0.3);">CHECKING XAUUSD</span>
       </div>
       
       <div class="advice-box" id="adviceBox" style="background:rgba(245,158,11,0.1); border-color:rgba(245,158,11,0.3); color:var(--amber);">
         <span>📰</span>
-        <span id="adviceText" class="kh">កំពុងផ្ទៀងផ្ទាត់ទិន្នន័យព័ត៌មានសេដ្ឋកិច្ច និងសន្ទស្សន៍មាសមុននឹងផ្ដល់សញ្ញា...</span>
+        <span id="adviceText" class="kh">កំពុងផ្ទៀងផ្ទាត់ទិន្នន័យតម្លៃមាសជាក់ស្តែង (XAUUSD) មុននឹងផ្ដល់សញ្ញា...</span>
       </div>
       
       <div class="sc-grid">
@@ -229,12 +229,12 @@
     <div class="panel">
       <div class="panel-head">
         <span>📦 ស្ថានភាពតម្រងព័ត៌មាន និងបច្ចេកទេស</span>
-        <span class="mono" style="color:var(--telegram); font-size:10px;">NEWS + TECH ACTIVE</span>
+        <span class="mono" style="color:var(--telegram); font-size:10px;">XAUUSD ACTIVE</span>
       </div>
       <div style="padding: 10px;">
         <div class="zones-box">
           <div class="zone-row" style="border-left: 3px solid var(--amber);">
-            <span class="zone-label" style="color:var(--amber);">Fundamental News Filter</span>
+            <span class="zone-label" style="color:var(--amber);">XAUUSD Market Filter</span>
             <span class="en" id="newsStatusVal" style="color:var(--amber);">Scanning...</span>
           </div>
           <div class="zone-row" style="border-left: 3px solid var(--telegram);">
@@ -257,7 +257,7 @@
       <div class="scroll-list" id="logList">
         <div class="log-item">
           <div class="log-meta"><span style="color:var(--telegram);">System</span><span class="mono">INIT</span></div>
-          <div>🤖 ប្រព័ន្ធតាមដានព័ត៌មាន និងទាញតម្លៃមាស API បានចាប់ផ្តើមដំណើរការ។</div>
+          <div>🤖 ប្រព័ន្ធតាមដានតម្លៃមាស XAUUSD API បានចាប់ផ្តើមដំណើរការ។</div>
         </div>
       </div>
     </div>
@@ -269,7 +269,7 @@
     document.getElementById('clock').textContent = new Date().toLocaleTimeString('en-GB');
   }, 1000);
 
-  let priceHistory = [4050, 4052, 4051, 4055, 4053, 4056, 4058, 4054, 4059, 4060, 4055, 4057, 4054, 4053, 4064.73];
+  let priceHistory = [4120, 4122, 4121, 4125, 4123, 4126, 4128, 4124, 4129, 4130, 4125, 4127, 4124, 4123, 4125.0];
   let lastSignalType = null;
   let marketSentiment = "NEUTRAL";
 
@@ -307,46 +307,36 @@
     const item = document.createElement('div');
     item.className = 'log-item';
     item.innerHTML = `
-      <div class="log-meta"><span style="color:${colorCode};">[News + Tech] ${title}</span><span class="mono">${timeStr}</span></div>
+      <div class="log-meta"><span style="color:${colorCode};">[XAUUSD + Tech] ${title}</span><span class="mono">${timeStr}</span></div>
       <div>🤖 ${message}</div>
     `;
     logList.prepend(item);
   }
 
-  async function checkMarketNewsAndSentiment() {
-      try {
-          let res = await fetch('https://api.coinbase.com/v2/prices/PAXG-USD/spot');
-          let json = await res.json();
-          let current = parseFloat(json.data.amount);
-          let prev = priceHistory[priceHistory.length - 2] || current;
-          let priceChangePercent = ((current - prev) / prev) * 100;
-
-          if (priceChangePercent > 0.05) {
-              marketSentiment = "BULLISH";
-          } else if (priceChangePercent < -0.05) {
-              marketSentiment = "BEARISH";
-          } else {
-              marketSentiment = "NEUTRAL";
-          }
-
-          document.getElementById('newsStatusVal').textContent = `Sentiment: ${marketSentiment} (${priceChangePercent.toFixed(2)}%)`;
-      } catch (e) {
-          marketSentiment = "NEUTRAL";
-          document.getElementById('newsStatusVal').textContent = "Sentiment: NEUTRAL (Stable)";
-      }
-  }
-
   async function fetchLiveMarketPrice() {
       try {
-          let response = await fetch('https://api.coinbase.com/v2/prices/PAXG-USD/spot');
+          // ប្រើប្រាស់ API សម្រាប់តម្លៃមាសពិតប្រាកដ (XAUUSD Spot)
+          let response = await fetch('https://data-asg.goldprice.org/dbXRates/USD');
           let data = await response.json();
-          let currentPrice = parseFloat(data.data.amount);
+          let currentPrice = parseFloat(data.items.find(i => i.curr === "USD").xauPrice);
           
           if (!isNaN(currentPrice)) {
-              await checkMarketNewsAndSentiment();
+              let prev = priceHistory[priceHistory.length - 2] || currentPrice;
+              let priceChangePercent = ((currentPrice - prev) / prev) * 100;
+
+              if (priceChangePercent > 0.03) {
+                  marketSentiment = "BULLISH";
+              } else if (priceChangePercent < -0.03) {
+                  marketSentiment = "BEARISH";
+              } else {
+                  marketSentiment = "NEUTRAL";
+              }
+
+              document.getElementById('newsStatusVal').textContent = `XAUUSD: ${marketSentiment} (${priceChangePercent.toFixed(2)}%)`;
               runTechnicalAnalysisWithPrice(currentPrice);
           }
       } catch (error) {
+          // ប្រសិនបើ API ដើមមានបញ្ហា ប្រើប្រាស់តម្លៃរត់បម្រុង (Fallback)
           let fallbackPrice = priceHistory[priceHistory.length - 1];
           runTechnicalAnalysisWithPrice(fallbackPrice);
       }
@@ -359,7 +349,7 @@
     let emaVal = calculateEMA(priceHistory, 10);
     let rsiVal = calculateRSI(priceHistory, 14);
 
-    document.getElementById('livePriceHeader').textContent = `តម្លៃ API: $${currentPrice.toFixed(2)}`;
+    document.getElementById('livePriceHeader').textContent = `តម្លៃមាស API: $${currentPrice.toFixed(2)}`;
     document.getElementById('emaStatusVal').textContent = `EMA(10): ${emaVal.toFixed(2)}`;
 
     let determinedType = null;
@@ -394,13 +384,13 @@
 
     if (type === "BUY") {
       entry = currentPrice;
-      sl = entry - 15.00;
-      tp1 = entry + 25.00;
-      tp2 = entry + 50.00;
-      tp3 = entry + 75.00;
+      sl = entry - 6.00;
+      tp1 = entry + 12.00;
+      tp2 = entry + 24.00;
+      tp3 = entry + 36.00;
       
       signalCard.style.borderLeftColor = "var(--green)";
-      badge.textContent = "NEWS + BUY SIGNAL";
+      badge.textContent = "XAUUSD + BUY SIGNAL";
       badge.style.background = "rgba(16, 185, 129, 0.15)";
       badge.style.color = "var(--green)";
       badge.style.borderColor = "rgba(16, 185, 129, 0.3)";
@@ -408,19 +398,19 @@
       adviceBox.style.background = "rgba(16, 185, 129, 0.1)";
       adviceBox.style.borderColor = "rgba(16, 185, 129, 0.3)";
       adviceBox.style.color = "var(--green)";
-      adviceText.textContent = "ព័ត៌មាន និងបច្ចេកទេស (MA/RSI) ស្របគ្នា ផ្ដល់សញ្ញាទិញ (Buy)!";
+      adviceText.textContent = "ទិន្នន័យមាស និងបច្ចេកទេស (MA/RSI) ស្របគ្នា ផ្ដល់សញ្ញាទិញ (Buy)!";
 
-      cardTitle.textContent = "News-Confirmed Buy Signal";
-      entryLabel.textContent = "តម្លៃចូល (Buy Market)";
+      cardTitle.textContent = "🚨 BOREN-SIGNAL PRO ELITE 🚨";
+      entryLabel.textContent = "តម្លៃចូល (Entry Market)";
     } else {
       entry = currentPrice;
-      sl = entry + 13.50;
-      tp1 = entry - 25.00;
-      tp2 = entry - 50.00;
-      tp3 = entry - 75.00;
+      sl = entry + 6.00;
+      tp1 = entry - 12.00;
+      tp2 = entry - 24.00;
+      tp3 = entry - 36.00;
 
       signalCard.style.borderLeftColor = "var(--red)";
-      badge.textContent = "NEWS + SELL SIGNAL";
+      badge.textContent = "XAUUSD + SELL SIGNAL";
       badge.style.background = "rgba(239, 68, 68, 0.15)";
       badge.style.color = "var(--red)";
       badge.style.borderColor = "rgba(239, 68, 68, 0.3)";
@@ -428,10 +418,10 @@
       adviceBox.style.background = "rgba(239, 68, 68, 0.1)";
       adviceBox.style.borderColor = "rgba(239, 68, 68, 0.3)";
       adviceBox.style.color = "var(--red)";
-      adviceText.textContent = "ព័ត៌មាន និងបច្ចេកទេស (MA/RSI) ស្របគ្នា ផ្ដល់សញ្ញាលក់ (Sell)!";
+      adviceText.textContent = "ទិន្នន័យមាស និងបច្ចេកទេស (MA/RSI) ស្របគ្នា ផ្ដល់សញ្ញាលក់ (Sell)!";
 
-      cardTitle.textContent = "News-Confirmed Sell Signal";
-      entryLabel.textContent = "តម្លៃចូល (Sell Market)";
+      cardTitle.textContent = "🚨 BOREN-SIGNAL PRO ELITE 🚨";
+      entryLabel.textContent = "តម្លៃចូល (Entry Market)";
     }
 
     entryPriceVal.style.color = entryColor;
@@ -442,14 +432,14 @@
     tp2Val.textContent = tp2.toFixed(2);
     tp3Val.textContent = tp3.toFixed(2);
 
-    const alertTitle = type === "BUY" ? "🟢 NEWS CONFIRMED BUY SIGNAL" : "🔴 NEWS CONFIRMED SELL SIGNAL";
-    const message = `${type === "BUY" ? "🟢 Gold News + Buy: " : "🔴 Gold News + Sell: "}${entry.toFixed(2)}\n🔹 *SL:* ${sl.toFixed(2)}\n🎯 *TP1:* ${tp1.toFixed(2)}\n🎯 *TP2:* ${tp2.toFixed(2)}\n🎯 *TP3:* ${tp3.toFixed(2)}`;
+    const alertTitle = type === "BUY" ? "🟢 XAUUSD CONFIRMED BUY SIGNAL" : "🔴 XAUUSD CONFIRMED SELL SIGNAL";
+    const message = `🚨 BOREN-SIGNAL PRO ELITE 🚨\n🪙 XAUUSD - ${type}\n📥 Entry: $${entry.toFixed(2)}\n🛑 SL: $${sl.toFixed(2)}\n🎯 TP1: $${tp1.toFixed(2)}\n🎯 TP2: $${tp2.toFixed(2)}\n🎯 TP3: $${tp3.toFixed(2)}`;
     
     logUIMessage(alertTitle, message, type.toLowerCase());
   }
 
   fetchLiveMarketPrice();
-  setInterval(fetchLiveMarketPrice, 2000);
+  setInterval(fetchLiveMarketPrice, 3000);
 </script>
 
 </body>

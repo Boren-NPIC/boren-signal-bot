@@ -161,7 +161,6 @@
 </header>
 
 <main>
-  <!-- 1. LEFT COLUMN: CHART -->
   <div class="left-workspace">
     <div class="panel chart-panel">
       <div class="panel-head">
@@ -193,9 +192,7 @@
     </div>
   </div>
 
-  <!-- 2. RIGHT COLUMN: ANALYSIS & TELEGRAM PANEL -->
   <div class="right-workspace">
-    <!-- SINGLE ACTIVE SIGNAL CARD -->
     <div class="signal-card" id="signalCardContainer" style="border-left-color: var(--amber);">
       <div class="sc-header">
         <span class="sc-title kh" id="cardTitle">កំពុងពិនិត្យព័ត៌មានទីផ្សារ...</span>
@@ -229,7 +226,6 @@
       </div>
     </div>
 
-    <!-- ZONES PANEL -->
     <div class="panel">
       <div class="panel-head">
         <span>📦 ស្ថានភាពតម្រងព័ត៌មាន និងបច្ចេកទេស</span>
@@ -253,7 +249,6 @@
       </div>
     </div>
 
-    <!-- SYSTEM LOGS -->
     <div class="panel">
       <div class="panel-head">
         <span>⚙️ កំណត់ហេតុប្រព័ន្ធ News & Logs</span>
@@ -276,7 +271,7 @@
 
   let priceHistory = [4050, 4052, 4051, 4055, 4053, 4056, 4058, 4054, 4059, 4060, 4055, 4057, 4054, 4053, 4064.73];
   let lastSignalType = null;
-  let marketSentiment = "NEUTRAL"; // ស្ថានភាពព័ត៌មានមូលដ្ឋាន (NEUTRAL, BULLISH, BEARISH)
+  let marketSentiment = "NEUTRAL";
 
   function calculateEMA(data, period) {
     if (data.length < period) return data[data.length - 1];
@@ -304,14 +299,9 @@
     return 100 - (100 / (1 + rs));
   }
 
-  async function sendTelegramAlert(title, message, type) {
-    const BOT_TOKEN = "8541087672:AAGRli-wwUE_-cACSNMbdjnS7p916xU8EMQ";
-    const CHAT_ID = "7176722918";
-    
-    const timeStr = new Date().toLocaleTimeString('en-GB');
-    const fullText = `🔔 *${title}* [${timeStr}]\n\n${message}`;
-
+  function logUIMessage(title, message, type) {
     const logList = document.getElementById('logList');
+    const timeStr = new Date().toLocaleTimeString('en-GB');
     let colorCode = type === 'sell' ? "var(--red)" : "var(--green)";
 
     const item = document.createElement('div');
@@ -321,33 +311,16 @@
       <div>🤖 ${message}</div>
     `;
     logList.prepend(item);
-
-    if (BOT_TOKEN !== "YOUR_TELEGRAM_BOT_TOKEN_HERE" && CHAT_ID !== "YOUR_CHAT_ID_HERE") {
-        try {
-            await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: CHAT_ID, text: fullText, parse_mode: 'Markdown' })
-            });
-        } catch (error) {
-            console.error("Telegram API Error:", error);
-        }
-    }
   }
 
-  // មុខងារត្រួតពិនិត្យព័ត៌មាន (Fundamental / News Sentiment Check)
   async function checkMarketNewsAndSentiment() {
       try {
-          // จำลองការទាញយកព័ត៌មានទូទៅ ឬ API ព័ត៌មានសេដ្ឋកិច្ច (ឧទាហរណ៍ការប្រែប្រួលអត្រាការប្រាក់ ឬ ဒေါ်လာ Index)
-          // ទីនេះយើងប្រើប្រាស់ AlphaVantage ឬ News API / ហ្វ្រេមត្រួតពិនិត្យភាពប្រែប្រួលតម្លៃជាក់ស្តែង
           let res = await fetch('https://api.coinbase.com/v2/prices/PAXG-USD/spot');
           let json = await res.json();
           let current = parseFloat(json.data.amount);
           let prev = priceHistory[priceHistory.length - 2] || current;
-          
           let priceChangePercent = ((current - prev) / prev) * 100;
 
-          // កំណត់ទិសដៅព័ត៌មានផ្អែកលើសម្ពាធទីផ្សារបច្ចុប្បន្ន
           if (priceChangePercent > 0.05) {
               marketSentiment = "BULLISH";
           } else if (priceChangePercent < -0.05) {
@@ -358,13 +331,11 @@
 
           document.getElementById('newsStatusVal').textContent = `Sentiment: ${marketSentiment} (${priceChangePercent.toFixed(2)}%)`;
       } catch (e) {
-          console.warn("News check fallback active");
           marketSentiment = "NEUTRAL";
           document.getElementById('newsStatusVal').textContent = "Sentiment: NEUTRAL (Stable)";
       }
   }
 
-  // ទាញតម្លៃពិតប្រាកដតាមរយៈ API និងផ្ទៀងផ្ទាត់ព័ត៌មាន
   async function fetchLiveMarketPrice() {
       try {
           let response = await fetch('https://api.coinbase.com/v2/prices/PAXG-USD/spot');
@@ -376,7 +347,6 @@
               runTechnicalAnalysisWithPrice(currentPrice);
           }
       } catch (error) {
-          console.warn("API Error, using fallback price:", error);
           let fallbackPrice = priceHistory[priceHistory.length - 1];
           runTechnicalAnalysisWithPrice(fallbackPrice);
       }
@@ -394,7 +364,6 @@
 
     let determinedType = null;
 
-    // លក្ខខណ្ឌវិភាគ៖ ត្រូវផ្ទៀងផ្ទាត់ទាំង Technical (MA & RSI) និង News Sentiment ស្របគ្នាទើបចេញ Signal
     if (currentPrice > emaVal && rsiVal < 70 && marketSentiment !== "BEARISH") {
       determinedType = "BUY";
     } else if (currentPrice < emaVal && rsiVal > 30 && marketSentiment !== "BULLISH") {
@@ -429,7 +398,6 @@
       tp1 = entry + 25.00;
       tp2 = entry + 50.00;
       tp3 = entry + 75.00;
-      entryColor = "var(--green)";
       
       signalCard.style.borderLeftColor = "var(--green)";
       badge.textContent = "NEWS + BUY SIGNAL";
@@ -450,7 +418,6 @@
       tp1 = entry - 25.00;
       tp2 = entry - 50.00;
       tp3 = entry - 75.00;
-      entryColor = "var(--red)";
 
       signalCard.style.borderLeftColor = "var(--red)";
       badge.textContent = "NEWS + SELL SIGNAL";
@@ -476,13 +443,11 @@
     tp3Val.textContent = tp3.toFixed(2);
 
     const alertTitle = type === "BUY" ? "🟢 NEWS CONFIRMED BUY SIGNAL" : "🔴 NEWS CONFIRMED SELL SIGNAL";
-    const symbolText = type === "BUY" ? "🟢 Gold News + Buy: " : "🔴 Gold News + Sell: ";
-    const message = `${symbolText}${entry.toFixed(2)}\n🔹 *SL:* ${sl.toFixed(2)}\n🎯 *TP1:* ${tp1.toFixed(2)}\n🎯 *TP2:* ${tp2.toFixed(2)}\n🎯 *TP3:* ${tp3.toFixed(2)}`;
+    const message = `${type === "BUY" ? "🟢 Gold News + Buy: " : "🔴 Gold News + Sell: "}${entry.toFixed(2)}\n🔹 *SL:* ${sl.toFixed(2)}\n🎯 *TP1:* ${tp1.toFixed(2)}\n🎯 *TP2:* ${tp2.toFixed(2)}\n🎯 *TP3:* ${tp3.toFixed(2)}`;
     
-    sendTelegramAlert(alertTitle, message, type.toLowerCase());
+    logUIMessage(alertTitle, message, type.toLowerCase());
   }
 
-  // ដំណើរការដំបូង និងកំណត់ម៉ោងទាញទិន្នន័យរៀងរាល់ ២ វិនាទី
   fetchLiveMarketPrice();
   setInterval(fetchLiveMarketPrice, 2000);
 </script>

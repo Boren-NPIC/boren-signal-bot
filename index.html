@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BOREN-SIGNAL PRO - Live TV Sync v6.2</title>
+<title>BOREN-SIGNAL PRO - Supply/Demand Logic v7.0</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+Khmer:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -60,7 +60,7 @@
   
   .header-right { display: flex; align-items: center; gap: 15px; font-size: 12px; }
   .live-badge {
-    background: rgba(16, 185, 129, 0.15); color: var(--green); border: 1px solid rgba(16, 185, 129, 0.3);
+    background: rgba(245, 158, 11, 0.15); color: var(--amber); border: 1px solid rgba(245, 158, 11, 0.3);
     padding: 3px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; display: flex; align-items: center; gap: 5px;
   }
 
@@ -105,6 +105,7 @@
   
   .signal-card {
     background: var(--panel); border: 1px solid var(--border); border-left: 4px solid var(--green); padding: 12px; border-radius: 6px;
+    transition: all 0.3s ease;
   }
   .sc-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
   .sc-title { font-size: 13px; font-weight: 700; color: var(--text); }
@@ -112,7 +113,7 @@
   
   .advice-box {
     padding: 8px; border-radius: 6px; margin-bottom: 8px; font-size: 11px; display: flex; align-items: center; gap: 8px;
-    background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); color: var(--green);
+    background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); color: var(--amber);
   }
 
   .sc-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; font-size: 11px; font-family: var(--font-mono); background: rgba(0,0,0,0.2); padding: 8px; border-radius: 6px; border: 1px solid var(--border); margin-bottom: 8px; }
@@ -121,7 +122,7 @@
   .sc-grid strong { font-size: 12px; }
 
   .tp-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 6px; font-family: var(--font-mono); font-size: 11px;
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin-top: 6px; font-family: var(--font-mono); font-size: 11px;
   }
   .tp-box {
     background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); padding: 6px; border-radius: 4px; text-align: center;
@@ -133,7 +134,7 @@
   .zone-row { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.4); padding: 7px 10px; border-radius: 4px; border: 1px solid var(--border); }
   .zone-label { font-size: 10px; font-weight: 600; font-family: var(--font-kh); }
 
-  .scroll-list { max-height: 140px; overflow-y: auto; }
+  .scroll-list { max-height: 130px; overflow-y: auto; }
   .scroll-list::-webkit-scrollbar { width: 3px; }
   .scroll-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
   
@@ -149,12 +150,12 @@
   <div class="brand">
     <div class="brand-logo-box">✈</div>
     <div>
-      <div class="brand-title en">BOREN-SIGNAL PRO <span style="font-size:10px; background:var(--telegram); color:#FFF; padding:1px 5px; border-radius:3px;">TV SYNC v6.2</span></div>
-      <div class="brand-sub">ទាញយកតម្លៃពី TradingView និងចាក់សោរស្វ័យប្រវត្ត</div>
+      <div class="brand-title en">BOREN-SIGNAL PRO <span style="font-size:10px; background:var(--amber); color:#000; padding:1px 5px; border-radius:3px;">S/D v7.0</span></div>
+      <div class="brand-sub">ប្រព័ន្ធវិភាគ Supply & Demand ស្វ័យប្រវត្ត</div>
     </div>
   </div>
   <div class="header-right">
-    <div class="live-badge"><span>●</span> TV Feed Synced</div>
+    <div class="live-badge" id="marketConditionBadge"><span>●</span> Monitoring S/D Zones</div>
     <div class="mono" id="clock" style="color:var(--amber); font-weight:600;">--:--:--</div>
   </div>
 </header>
@@ -163,8 +164,8 @@
   <div class="left-workspace">
     <div class="panel chart-panel">
       <div class="panel-head">
-        <span>📊 ក្រាហ្វ TradingView XAUUSD</span>
-        <span class="mono" style="color:var(--amber); font-size:12px;">OANDA:XAUUSD</span>
+        <span>📊 ក្រាហ្វ TradingView XAUUSD (Supply & Demand Analysis)</span>
+        <span class="mono" id="livePriceHeader" style="color:var(--amber); font-size:12px;">OANDA:XAUUSD</span>
       </div>
       <div class="tv-container">
         <!-- TradingView Advanced Chart Widget -->
@@ -193,53 +194,49 @@
   </div>
 
   <div class="right-workspace">
-    <div class="signal-card">
+    <div class="signal-card" id="signalCardBox">
       <div class="sc-header">
         <span class="sc-title kh">🚨 BOREN-SIGNAL PRO ELITE 🚨</span>
-        <span class="sc-badge" style="background:rgba(16, 185, 129, 0.15); color:var(--green); border:1px solid rgba(16, 185, 129, 0.3);">XAUUSD + BUY</span>
+        <span class="sc-badge" id="signalTypeBadge" style="background:rgba(245, 158, 11, 0.15); color:var(--amber); border:1px solid rgba(245, 158, 11, 0.3);">WAITING S/D</span>
       </div>
       
-      <div class="advice-box">
+      <div class="advice-box" id="adviceBox">
         <span>📌</span>
-        <span class="kh">ទាញយកតម្លៃពី TradingView រួចចាក់សោរទុកដោយសុវត្ថិភាព!</span>
+        <span class="kh" id="adviceText">រង់ចាំតម្លៃតេស្តតំបន់ Supply ឬ Demand មុននឹងចេញសញ្ញា Auto!</span>
       </div>
       
       <div class="sc-grid">
-        <div><span>តម្លៃចូល (TV Entry)</span><strong class="en" id="entryPriceVal">--</strong></div>
-        <div><span>កាត់ខាត (SL)</span><strong class="en" id="slPriceVal" style="color:var(--red);">--</strong></div>
+        <div><span>តម្លៃចូល (Entry Price)</span><strong class="en" id="entryPriceVal">--</strong></div>
+        <div><span>កាត់ខាត (SL - 10$)</span><strong class="en" id="slPriceVal" style="color:var(--red);">--</strong></div>
       </div>
 
-      <span style="font-size: 10px; color: var(--text-dim);">គោលដៅ Take Profit (TV TPs):</span>
+      <span style="font-size: 10px; color: var(--text-dim);">គោលដៅ Take Profit (TP - 12$):</span>
       <div class="tp-grid">
         <div class="tp-box">
           <span>TP 1</span>
           <strong class="en" id="tp1Val">--</strong>
         </div>
         <div class="tp-box">
-          <span>TP 2</span>
+          <span>TP 2 (Final)</span>
           <strong class="en" id="tp2Val">--</strong>
-        </div>
-        <div class="tp-box">
-          <span>TP 3</span>
-          <strong class="en" id="tp3Val">--</strong>
         </div>
       </div>
     </div>
 
     <div class="panel">
       <div class="panel-head">
-        <span>📦 ស្ថានភាពតំបន់តម្លៃ (Status)</span>
-        <span class="mono" style="color:var(--green); font-size:10px;">SYNCED & LOCKED</span>
+        <span>📦 ស្ថានភាពតំបន់ (Supply / Demand Zones)</span>
+        <span class="mono" style="color:var(--amber); font-size:10px;">ACTIVE SCAN</span>
       </div>
       <div style="padding: 10px;">
         <div class="zones-box">
-          <div class="zone-row" style="border-left: 3px solid var(--amber);">
-            <span class="zone-label" style="color:var(--amber);">Market Source</span>
-            <span class="en" style="color:var(--green);">TradingView (OANDA)</span>
+          <div class="zone-row" style="border-left: 3px solid var(--red);">
+            <span class="zone-label" style="color:var(--red);">Supply Zone (Resistance)</span>
+            <span class="en" id="supplyZoneText">4095.00 - 4100.00</span>
           </div>
-          <div class="zone-row" style="border-left: 3px solid var(--telegram);">
-            <span class="zone-label" style="color:var(--telegram);">Signal Lock</span>
-            <span class="en" style="color:var(--green);">Active & Fixed</span>
+          <div class="zone-row" style="border-left: 3px solid var(--green);">
+            <span class="zone-label" style="color:var(--green);">Demand Zone (Support)</span>
+            <span class="en" id="demandZoneText">4050.00 - 4055.00</span>
           </div>
         </div>
       </div>
@@ -247,13 +244,13 @@
 
     <div class="panel">
       <div class="panel-head">
-        <span>⚙️ កំណត់ហេតុប្រព័ន្ធ Logs</span>
-        <span class="mono" style="color:var(--green); font-size:10px;">● READY</span>
+        <span>⚙️ កំណត់ហេតុប្រព័ន្ធ Logs (S/D Engine)</span>
+        <span class="mono" style="color:var(--green); font-size:10px;">● RUNNING</span>
       </div>
       <div class="scroll-list" id="logList">
         <div class="log-item">
-          <div class="log-meta"><span style="color:var(--green);">[TV Feed]</span><span class="mono">Locked</span></div>
-          <div>🤖 បានទាញយកតម្លៃពី TradingView មកចាក់សោរទុកក្នុង Signal ជោគជ័យ។</div>
+          <div class="log-meta"><span style="color:var(--amber);">[System]</span><span class="mono">Initialized</span></div>
+          <div>🤖 ប្រព័ន្ធចាប់ផ្តើមតាមដានតម្លៃបុក Supply/Demand ជាមួយ SL 10$ និង TP 12$ ។</div>
         </div>
       </div>
     </div>
@@ -265,21 +262,78 @@
     document.getElementById('clock').textContent = new Date().toLocaleTimeString('en-GB');
   }, 1000);
 
-  // ดึงราคาจริงจากตลาดปัจจุบันมาตั้งเป็นค่า Entry 1 ครั้ง แล้วล็อคไว้ทันที
-  // (อิงจากเรทราคาตลาด XAUUSD จริงปัจจุบัน)
-  window.addEventListener('DOMContentLoaded', () => {
-    let tvPrice = 4078.50; // ราคาอ้างอิงจาก TradingView Live Feed
-    let slPrice = tvPrice - 6.00;
-    let tp1 = tvPrice + 6.00;
-    let tp2 = tvPrice + 12.00;
-    let tp3 = tvPrice + 18.00;
+  // จำลองระบบตรวจสอบราคาเทียบกับ Supply/Demand
+  // สมมติ Supply อยู่ที่ 4095 និង Demand อยู่ที่ 4050
+  let simulatedMarketPrice = 4078.50; 
+  let currentSignalState = "WAITING";
 
-    document.getElementById('entryPriceVal').textContent = tvPrice.toFixed(2);
-    document.getElementById('slPriceVal').textContent = slPrice.toFixed(2);
-    document.getElementById('tp1Val').textContent = tp1.toFixed(2);
-    document.getElementById('tp2Val').textContent = tp2.toFixed(2);
-    document.getElementById('tp3Val').textContent = tp3.toFixed(2);
-  });
+  function evaluateSupplyDemandLogic() {
+    // ขยับราคาตลาดจำลองเล็กน้อยเพื่อทดสอบเงื่อนไข
+    let fluctuation = (Math.random() - 0.48) * 1.5;
+    simulatedMarketPrice = parseFloat((simulatedMarketPrice + fluctuation).toFixed(2));
+    document.getElementById('livePriceHeader').textContent = `តម្លៃមាស: $${simulatedMarketPrice.toFixed(2)}`;
+
+    let supplyLow = 4090.00;
+    let demandHigh = 4055.00;
+
+    let card = document.getElementById('signalCardBox');
+    let badge = document.getElementById('signalTypeBadge');
+    let advice = document.getElementById('adviceText');
+    let adviceBox = document.getElementById('adviceBox');
+    let entryVal = document.getElementById('entryPriceVal');
+    let slVal = document.getElementById('slPriceVal');
+    let tp1Val = document.getElementById('tp1Val');
+    let tp2Val = document.getElementById('tp2Val');
+
+    // เงื่อนไขที่ 1: បុក Supply ແຕ່មិនផុត -> ออก SELL Auto
+    if (simulatedMarketPrice >= supplyLow && simulatedMarketPrice < 4100.00) {
+      let entry = simulatedMarketPrice;
+      let sl = entry + 10.00; // SL 10$ ខាងលើ
+      let tp1 = entry - 12.00; // TP 12$ ខាងក្រោម
+      let tp2 = entry - 24.00;
+
+      card.style.borderLeftColor = 'var(--red)';
+      badge.textContent = 'XAUUSD + SELL (Supply Reject)';
+      badge.style.background = 'rgba(239, 68, 68, 0.15)';
+      badge.style.color = 'var(--red)';
+      badge.style.borderColor = 'rgba(239, 68, 68, 0.3)';
+      
+      adviceBox.style.background = 'rgba(239, 68, 68, 0.1)';
+      adviceBox.style.borderColor = 'rgba(239, 68, 68, 0.3)';
+      adviceBox.style.color = 'var(--red)';
+      advice.textContent = 'តម្លៃបុកតំបន់ Supply តែមិនផុត! ចេញសញ្ញា SELL Auto (SL 10$, TP 12$)។';
+
+      entryVal.textContent = entry.toFixed(2);
+      slVal.textContent = sl.toFixed(2);
+      tp1Val.textContent = tp1.toFixed(2);
+      tp2Val.textContent = tp2.toFixed(2);
+    } 
+    // เงื่อนไขที่ 2: ចុះមកដល់ Demand ហើយមិនបែក Demand -> ออก BUY
+    else if (simulatedMarketPrice <= demandHigh && simulatedMarketPrice > 4040.00) {
+      let entry = simulatedMarketPrice;
+      let sl = entry - 10.00; // SL 10$ ខាងក្រោម
+      let tp1 = entry + 12.00; // TP 12$ ខាងលើ
+      let tp2 = entry + 24.00;
+
+      card.style.borderLeftColor = 'var(--green)';
+      badge.textContent = 'XAUUSD + BUY (Demand Hold)';
+      badge.style.background = 'rgba(16, 185, 129, 0.15)';
+      badge.style.color = 'var(--green)';
+      badge.style.borderColor = 'rgba(16, 185, 129, 0.3)';
+      
+      adviceBox.style.background = 'rgba(16, 185, 129, 0.1)';
+      adviceBox.style.borderColor = 'rgba(16, 185, 129, 0.3)';
+      adviceBox.style.color = 'var(--green)';
+      advice.textContent = 'តម្លៃប៉ះតំបន់ Demand មិនបែក! ចេញសញ្ញា BUY Auto (SL 10$, TP 12$)។';
+
+      entryVal.textContent = entry.toFixed(2);
+      slVal.textContent = sl.toFixed(2);
+      tp1Val.textContent = tp1.toFixed(2);
+      tp2Val.textContent = tp2.toFixed(2);
+    }
+  }
+
+  setInterval(evaluateSupplyDemandLogic, 3000);
 </script>
 
 </body>

@@ -1,340 +1,151 @@
 <!DOCTYPE html>
 <html lang="km">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BOREN-SIGNAL PRO - Supply/Demand Logic v7.0</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+Khmer:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #07090E;
-    --panel: #0D131D;
-    --panel-alt: #121A26;
-    --border: #1E293B;
-    --text: #F1F5F9;
-    --text-dim: #94A3B8;
-    --amber: #F59E0B;
-    --red: #EF4444;
-    --green: #10B981;
-    --telegram: #229ED9;
-    --font-display: 'Space Grotesk', sans-serif;
-    --font-mono: 'IBM Plex Mono', monospace;
-    --font-kh: 'Noto Sans Khmer', sans-serif;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--font-kh), sans-serif;
-    height: 100vh;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-  }
-  .mono { font-family: var(--font-mono), monospace; font-variant-numeric: tabular-nums; }
-  .en { font-family: var(--font-display), sans-serif; }
-
-  header {
-    flex: 0 0 auto;
-    padding: 10px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid var(--border);
-    background: rgba(13, 19, 29, 0.95);
-    backdrop-filter: blur(10px);
-    z-index: 100;
-  }
-  .brand { display: flex; align-items: center; gap: 10px; }
-  .brand-logo-box {
-    width: 32px; height: 32px; background: linear-gradient(135deg, var(--telegram), #1275A2);
-    border-radius: 6px; display: flex; align-items: center; justify-content: center;
-    font-weight: 700; color: #FFF; font-size: 16px; font-family: var(--font-display);
-    box-shadow: 0 0 12px rgba(34, 158, 217, 0.4);
-  }
-  .brand-title { font-size: 16px; font-weight: 700; color: var(--telegram); letter-spacing: 0.5px; }
-  .brand-sub { font-size: 10px; color: var(--text-dim); }
-  
-  .header-right { display: flex; align-items: center; gap: 15px; font-size: 12px; }
-  .live-badge {
-    background: rgba(245, 158, 11, 0.15); color: var(--amber); border: 1px solid rgba(245, 158, 11, 0.3);
-    padding: 3px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; display: flex; align-items: center; gap: 5px;
-  }
-
-  main {
-    flex: 1;
-    display: grid;
-    grid-template-columns: 1fr 420px;
-    gap: 12px;
-    padding: 12px;
-    overflow: hidden;
-  }
-  @media(max-width: 1200px) {
-    main { grid-template-columns: 1fr; overflow-y: auto; }
-    body { height: auto; overflow: auto; }
-  }
-
-  .panel {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-  }
-  .panel-head {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 8px 14px;
-    background: var(--panel-alt);
-    border-bottom: 1px solid var(--border);
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--text-dim);
-    flex-shrink: 0;
-  }
-
-  .left-workspace { display: flex; flex-direction: column; gap: 10px; height: 100%; }
-  .chart-panel { flex: 1; min-height: 550px; }
-  .tv-container { width: 100%; height: 100%; background: #07090E; position: relative; }
-
-  .right-workspace { display: flex; flex-direction: column; gap: 10px; height: 100%; overflow-y: auto; }
-  
-  .signal-card {
-    background: var(--panel); border: 1px solid var(--border); border-left: 4px solid var(--green); padding: 12px; border-radius: 6px;
-    transition: all 0.3s ease;
-  }
-  .sc-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-  .sc-title { font-size: 13px; font-weight: 700; color: var(--text); }
-  .sc-badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; font-family: var(--font-mono); }
-  
-  .advice-box {
-    padding: 8px; border-radius: 6px; margin-bottom: 8px; font-size: 11px; display: flex; align-items: center; gap: 8px;
-    background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); color: var(--amber);
-  }
-
-  .sc-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; font-size: 11px; font-family: var(--font-mono); background: rgba(0,0,0,0.2); padding: 8px; border-radius: 6px; border: 1px solid var(--border); margin-bottom: 8px; }
-  .sc-grid div { display: flex; flex-direction: column; gap: 2px; }
-  .sc-grid span { color: var(--text-dim); font-size: 9px; }
-  .sc-grid strong { font-size: 12px; }
-
-  .tp-grid {
-    display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin-top: 6px; font-family: var(--font-mono); font-size: 11px;
-  }
-  .tp-box {
-    background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); padding: 6px; border-radius: 4px; text-align: center;
-  }
-  .tp-box span { color: var(--text-dim); font-size: 8px; display: block; margin-bottom: 2px; }
-  .tp-box strong { color: var(--green); font-size: 11px; }
-
-  .zones-box { display: flex; flex-direction: column; gap: 6px; font-size: 11px; font-family: var(--font-mono); }
-  .zone-row { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.4); padding: 7px 10px; border-radius: 4px; border: 1px solid var(--border); }
-  .zone-label { font-size: 10px; font-weight: 600; font-family: var(--font-kh); }
-
-  .scroll-list { max-height: 130px; overflow-y: auto; }
-  .scroll-list::-webkit-scrollbar { width: 3px; }
-  .scroll-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-  
-  .log-item {
-    padding: 7px 10px; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: 3px; background: rgba(13, 19, 29, 0.5); font-size: 11px;
-  }
-  .log-meta { font-family: var(--font-mono); font-size: 9px; color: var(--text-dim); display: flex; justify-content: space-between; }
-</style>
+    <meta charset="UTF-8">
+    <title>ប្រព័ន្ធវិភាគទីផ្សារមាស - AUTO-PILOT v1.2</title>
+    <style>
+        body { background-color: #0d1117; color: #c9d1d9; font-family: sans-serif; margin: 0; padding: 20px; }
+        .header { display: flex; justify-content: space-between; align-items: center; background: #161b22; padding: 15px 20px; border-radius: 8px; margin-bottom: 20px; }
+        .main-container { display: flex; gap: 20px; }
+        .chart-box { flex: 3; background: #161b22; padding: 15px; border-radius: 8px; height: 600px; }
+        .sidebar { flex: 1; display: flex; flex-direction: column; gap: 15px; }
+        .card { background: #161b22; padding: 15px; border-radius: 8px; border: 1px solid #30363d; }
+        .badge-action { padding: 3px 8px; border-radius: 4px; font-size: 12px; color: white; }
+        .price-box { font-size: 24px; font-weight: bold; color: #f85149; margin: 10px 0; }
+        .tp-grid { display: flex; gap: 10px; margin-top: 10px; }
+        .tp-item { background: #21262d; padding: 8px; border-radius: 6px; flex: 1; text-align: center; }
+        .log-item { font-size: 12px; border-bottom: 1px solid #30363d; padding: 8px 0; }
+    </style>
 </head>
 <body>
 
-<header>
-  <div class="brand">
-    <div class="brand-logo-box">✈</div>
-    <div>
-      <div class="brand-title en">BOREN-SIGNAL PRO <span style="font-size:10px; background:var(--amber); color:#000; padding:1px 5px; border-radius:3px;">S/D v7.0</span></div>
-      <div class="brand-sub">ប្រព័ន្ធវិភាគ Supply & Demand ស្វ័យប្រវត្ត</div>
+    <div class="header">
+        <div>
+            <h2>🪙 ប្រព័ន្ធវិភាគទីផ្សារមាស <span style="font-size: 12px; background: #388bfd; padding: 2px 6px; border-radius: 4px;">AUTO-PILOT v1.2</span></h2>
+            <p style="font-size: 13px; color: #8b949e; margin: 0;">ប្រព័ន្ធវិភាគផ្តល់សញ្ញាព្យាករណ៍ដោយស្វ័យប្រវត្តិ — XAU/USD</p>
+        </div>
+        <div>🟢 <span id="system-status">កំពុងដំណើរការសញ្ញាទីផ្សារ</span></div>
     </div>
-  </div>
-  <div class="header-right">
-    <div class="live-badge" id="marketConditionBadge"><span>●</span> Monitoring S/D Zones</div>
-    <div class="mono" id="clock" style="color:var(--amber); font-weight:600;">--:--:--</div>
-  </div>
-</header>
 
-<main>
-  <div class="left-workspace">
-    <div class="panel chart-panel">
-      <div class="panel-head">
-        <span>📊 ក្រាហ្វ TradingView XAUUSD (Supply & Demand Analysis)</span>
-        <span class="mono" id="livePriceHeader" style="color:var(--amber); font-size:12px;">OANDA:XAUUSD</span>
-      </div>
-      <div class="tv-container">
-        <!-- TradingView Advanced Chart Widget -->
-        <div class="tradingview-widget-container" style="width:100%;height:100%;">
-          <div class="tradingview-widget-container__widget" style="width:100%;height:100%;"></div>
-          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
-          {
-            "width": "100%",
-            "height": "100%",
+    <div class="main-container">
+        <!-- ផ្នែកក្រាហ្វ TradingView ខាងឆ្វេង -->
+        <div class="chart-box">
+            <div class="tradingview-widget-container" style="height:100%;width:100%">
+                <div id="tradingview_chart" style="height:100%;width:100%"></div>
+            </div>
+        </div>
+
+        <!-- ផ្នែកបង្ហាញសញ្ញាខាងស្តាំ -->
+        <div class="sidebar">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between;">
+                    <b id="action-title">XAUUSD • គ្មានសញ្ញា</b>
+                    <span id="action-badge" class="badge-action" style="background-color: #8b949e;">NO SIGNAL</span>
+                </div>
+                <div style="font-size: 12px; color: #8b949e; margin-top: 10px;">តម្លៃ Entry (OANDA:XAUUSD)</div>
+                <div class="price-box" id="entry-price">$0.00</div>
+                <div style="font-size: 12px; color: #8b949e;" id="analysis-note">រងចាំទិន្នន័យវិភាគ...</div>
+
+                <div style="display: flex; gap: 10px; margin-top: 15px;">
+                    <div style="flex:1; background:#21262d; padding:8px; border-radius:6px;">
+                        <div style="font-size:11px; color:#8b949e;">កំរិតចូល (Entry)</div>
+                        <div id="box-entry" style="font-weight:bold; color: #58a6ff;">$0.00</div>
+                    </div>
+                    <div style="flex:1; background:#21262d; padding:8px; border-radius:6px;">
+                        <div style="font-size:11px; color:#8b949e;">ឈប់ខាត (SL)</div>
+                        <div id="box-sl" style="font-weight:bold; color: #f85149;">$0.00</div>
+                    </div>
+                </div>
+
+                <div style="font-size: 12px; color: #8b949e; margin-top: 15px;">គោលដៅយកចំណេញ (Take Profit)</div>
+                <div class="tp-grid">
+                    <div class="tp-item"><div style="font-size:10px; color:#8b949e;">TP 1</div><div id="tp1" style="font-weight:bold; color: #3fb950;">$0.00</div></div>
+                    <div class="tp-item"><div style="font-size:10px; color:#8b949e;">TP 2</div><div id="tp2" style="font-weight:bold; color: #3fb950;">$0.00</div></div>
+                    <div class="tp-item"><div style="font-size:10px; color:#8b949e;">TP 3</div><div id="tp3" style="font-weight:bold; color: #3fb950;">$0.00</div></div>
+                </div>
+            </div>
+
+            <!-- ប្រអប់ Logs តាមដានសញ្ញា -->
+            <div class="card" style="flex: 1; overflow-y: auto; max-height: 200px;">
+                <b>📋 កំណត់ហេតុសញ្ញា (Signal Logs)</b>
+                <div id="logs-container" style="margin-top: 10px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script សម្រាប់ទាញក្រាហ្វ TradingView និងទិន្នន័យពី Python Backend -->
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+    <script type="text/javascript">
+        let tvWidget = new TradingView.widget({
+            "autosize": true,
             "symbol": "OANDA:XAUUSD",
             "interval": "15",
-            "timezone": "Asia/Bangkok",
+            "timezone": "Etc/UTC",
             "theme": "dark",
             "style": "1",
             "locale": "en",
-            "allow_symbol_change": true,
-            "save_image": true,
-            "calendar": false,
-            "studies": ["STD;MAExp", "STD;RSI"],
-            "support_host": "https://www.tradingview.com"
-          }
-          </script>
-        </div>
-      </div>
-    </div>
-  </div>
+            "toolbar_bg": "#f1f3f6",
+            "enable_publishing": false,
+            "container_id": "tradingview_chart"
+        });
 
-  <div class="right-workspace">
-    <div class="signal-card" id="signalCardBox">
-      <div class="sc-header">
-        <span class="sc-title kh">🚨 BOREN-SIGNAL PRO ELITE 🚨</span>
-        <span class="sc-badge" id="signalTypeBadge" style="background:rgba(245, 158, 11, 0.15); color:var(--amber); border:1px solid rgba(245, 158, 11, 0.3);">WAITING S/D</span>
-      </div>
-      
-      <div class="advice-box" id="adviceBox">
-        <span>📌</span>
-        <span class="kh" id="adviceText">រង់ចាំតម្លៃតេស្តតំបន់ Supply ឬ Demand មុននឹងចេញសញ្ញា Auto!</span>
-      </div>
-      
-      <div class="sc-grid">
-        <div><span>តម្លៃចូល (Entry Price)</span><strong class="en" id="entryPriceVal">--</strong></div>
-        <div><span>កាត់ខាត (SL - 10$)</span><strong class="en" id="slPriceVal" style="color:var(--red);">--</strong></div>
-      </div>
+        async function fetchSignalData() {
+            try {
+                let response = await fetch('http://localhost:8000/api/analysis-status');
+                let result = await response.json();
+                if(result.success) {
+                    let d = result.data;
+                    
+                    let actionBadge = document.getElementById('action-badge');
+                    let actionTitle = document.getElementById('action-title');
+                    
+                    // ទាញតម្លៃ Live ពី Backend (ដែលត្រូវនឹង Spot Price) មកប្រើពេលគ្មានសញ្ញា
+                    let livePrice = d.entry_price;
 
-      <span style="font-size: 10px; color: var(--text-dim);">គោលដៅ Take Profit (TP - 12$):</span>
-      <div class="tp-grid">
-        <div class="tp-box">
-          <span>TP 1</span>
-          <strong class="en" id="tp1Val">--</strong>
-        </div>
-        <div class="tp-box">
-          <span>TP 2 (Final)</span>
-          <strong class="en" id="tp2Val">--</strong>
-        </div>
-      </div>
-    </div>
+                    if (d.action === "NO SIGNAL") {
+                        // ពេលគ្មានសញ្ញា៖ ឱ្យតម្លៃរត់តាមតម្លៃទីផ្សារពិតប្រាកដ
+                        actionTitle.innerHTML = `XAUUSD • គ្មានសញ្ញា`;
+                        actionBadge.innerText = "NO SIGNAL";
+                        actionBadge.style.backgroundColor = "#8b949e";
+                        
+                        document.getElementById('entry-price').innerText = `$${livePrice}`;
+                        document.getElementById('analysis-note').innerText = `[Auto-Pilot] តម្លៃទីផ្សារ Live $${livePrice} | RSI (${d.rsi}) — រង់ចាំសញ្ញា`;
+                        
+                        document.getElementById('box-entry').innerText = `$0`;
+                        document.getElementById('box-sl').innerText = `$0`;
+                        document.getElementById('tp1').innerText = `$0`;
+                        document.getElementById('tp2').innerText = `$0`;
+                        document.getElementById('tp3').innerText = `$0`;
+                    } else {
+                        // ពេលមានសញ្ញា ACTIVE (BUY ឫ SELL)៖ ចាក់សោរតម្លៃ Entry ថេរ មិនឱ្យរត់តាមទីផ្សារទៀតទេ
+                        let isBuy = d.action === "BUY";
+                        actionTitle.innerHTML = `XAUUSD • ${isBuy ? 'ទិញ (BUY)' : 'លក់ (SELL)'}`;
+                        actionBadge.innerText = d.action;
+                        actionBadge.style.backgroundColor = isBuy ? "#238636" : "#da3633";
+                        
+                        document.getElementById('entry-price').innerText = `$${d.entry_price}`;
+                        document.getElementById('analysis-note').innerText = `[Auto-Pilot] ចាក់សោរសញ្ញា ${d.action} — រង់ចាំ Hit TP/SL`;
+                        
+                        document.getElementById('box-entry').innerText = `$${d.entry_price}`;
+                        document.getElementById('box-sl').innerText = `$${d.stop_loss}`;
+                        document.getElementById('tp1').innerText = `$${d.tp1}`;
+                        document.getElementById('tp2').innerText = `$${d.tp2}`;
+                        document.getElementById('tp3').innerText = `$${d.tp3}`;
+                    }
 
-    <div class="panel">
-      <div class="panel-head">
-        <span>📦 ស្ថានភាពតំបន់ (Supply / Demand Zones)</span>
-        <span class="mono" style="color:var(--amber); font-size:10px;">ACTIVE SCAN</span>
-      </div>
-      <div style="padding: 10px;">
-        <div class="zones-box">
-          <div class="zone-row" style="border-left: 3px solid var(--red);">
-            <span class="zone-label" style="color:var(--red);">Supply Zone (Resistance)</span>
-            <span class="en" id="supplyZoneText">4095.00 - 4100.00</span>
-          </div>
-          <div class="zone-row" style="border-left: 3px solid var(--green);">
-            <span class="zone-label" style="color:var(--green);">Demand Zone (Support)</span>
-            <span class="en" id="demandZoneText">4050.00 - 4055.00</span>
-          </div>
-        </div>
-      </div>
-    </div>
+                    let logsHtml = '';
+                    d.logs.forEach(log => {
+                        logsHtml += `<div class="log-item"><span style="color:#8b949e;">[${log.time}]</span> <b>${log.type}</b> — ${log.text}</div>`;
+                    });
+                    document.getElementById('logs-container').innerHTML = logsHtml;
+                }
+            } catch (e) {
+                console.error("មិនអាចតភ្ជាប់ទៅកាន់ Backend បានទេ:", e);
+            }
+        }
 
-    <div class="panel">
-      <div class="panel-head">
-        <span>⚙️ កំណត់ហេតុប្រព័ន្ធ Logs (S/D Engine)</span>
-        <span class="mono" style="color:var(--green); font-size:10px;">● RUNNING</span>
-      </div>
-      <div class="scroll-list" id="logList">
-        <div class="log-item">
-          <div class="log-meta"><span style="color:var(--amber);">[System]</span><span class="mono">Initialized</span></div>
-          <div>🤖 ប្រព័ន្ធចាប់ផ្តើមតាមដានតម្លៃបុក Supply/Demand ជាមួយ SL 10$ និង TP 12$ ។</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</main>
-
-<script>
-  setInterval(() => {
-    document.getElementById('clock').textContent = new Date().toLocaleTimeString('en-GB');
-  }, 1000);
-
-  // จำลองระบบตรวจสอบราคาเทียบกับ Supply/Demand
-  // สมมติ Supply อยู่ที่ 4095 និង Demand อยู่ที่ 4050
-  let simulatedMarketPrice = 4078.50; 
-  let currentSignalState = "WAITING";
-
-  function evaluateSupplyDemandLogic() {
-    // ขยับราคาตลาดจำลองเล็กน้อยเพื่อทดสอบเงื่อนไข
-    let fluctuation = (Math.random() - 0.48) * 1.5;
-    simulatedMarketPrice = parseFloat((simulatedMarketPrice + fluctuation).toFixed(2));
-    document.getElementById('livePriceHeader').textContent = `តម្លៃមាស: $${simulatedMarketPrice.toFixed(2)}`;
-
-    let supplyLow = 4090.00;
-    let demandHigh = 4055.00;
-
-    let card = document.getElementById('signalCardBox');
-    let badge = document.getElementById('signalTypeBadge');
-    let advice = document.getElementById('adviceText');
-    let adviceBox = document.getElementById('adviceBox');
-    let entryVal = document.getElementById('entryPriceVal');
-    let slVal = document.getElementById('slPriceVal');
-    let tp1Val = document.getElementById('tp1Val');
-    let tp2Val = document.getElementById('tp2Val');
-
-    // เงื่อนไขที่ 1: បុក Supply ແຕ່មិនផុត -> ออก SELL Auto
-    if (simulatedMarketPrice >= supplyLow && simulatedMarketPrice < 4100.00) {
-      let entry = simulatedMarketPrice;
-      let sl = entry + 10.00; // SL 10$ ខាងលើ
-      let tp1 = entry - 12.00; // TP 12$ ខាងក្រោម
-      let tp2 = entry - 24.00;
-
-      card.style.borderLeftColor = 'var(--red)';
-      badge.textContent = 'XAUUSD + SELL (Supply Reject)';
-      badge.style.background = 'rgba(239, 68, 68, 0.15)';
-      badge.style.color = 'var(--red)';
-      badge.style.borderColor = 'rgba(239, 68, 68, 0.3)';
-      
-      adviceBox.style.background = 'rgba(239, 68, 68, 0.1)';
-      adviceBox.style.borderColor = 'rgba(239, 68, 68, 0.3)';
-      adviceBox.style.color = 'var(--red)';
-      advice.textContent = 'តម្លៃបុកតំបន់ Supply តែមិនផុត! ចេញសញ្ញា SELL Auto (SL 10$, TP 12$)។';
-
-      entryVal.textContent = entry.toFixed(2);
-      slVal.textContent = sl.toFixed(2);
-      tp1Val.textContent = tp1.toFixed(2);
-      tp2Val.textContent = tp2.toFixed(2);
-    } 
-    // เงื่อนไขที่ 2: ចុះមកដល់ Demand ហើយមិនបែក Demand -> ออก BUY
-    else if (simulatedMarketPrice <= demandHigh && simulatedMarketPrice > 4040.00) {
-      let entry = simulatedMarketPrice;
-      let sl = entry - 10.00; // SL 10$ ខាងក្រោម
-      let tp1 = entry + 12.00; // TP 12$ ខាងលើ
-      let tp2 = entry + 24.00;
-
-      card.style.borderLeftColor = 'var(--green)';
-      badge.textContent = 'XAUUSD + BUY (Demand Hold)';
-      badge.style.background = 'rgba(16, 185, 129, 0.15)';
-      badge.style.color = 'var(--green)';
-      badge.style.borderColor = 'rgba(16, 185, 129, 0.3)';
-      
-      adviceBox.style.background = 'rgba(16, 185, 129, 0.1)';
-      adviceBox.style.borderColor = 'rgba(16, 185, 129, 0.3)';
-      adviceBox.style.color = 'var(--green)';
-      advice.textContent = 'តម្លៃប៉ះតំបន់ Demand មិនបែក! ចេញសញ្ញា BUY Auto (SL 10$, TP 12$)។';
-
-      entryVal.textContent = entry.toFixed(2);
-      slVal.textContent = sl.toFixed(2);
-      tp1Val.textContent = tp1.toFixed(2);
-      tp2Val.textContent = tp2.toFixed(2);
-    }
-  }
-
-  setInterval(evaluateSupplyDemandLogic, 3000);
-</script>
-
+        setInterval(fetchSignalData, 3000);
+        fetchSignalData();
+    </script>
 </body>
 </html>
